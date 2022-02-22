@@ -1,9 +1,14 @@
+
 package src;
 
+import java.awt.Color;
 import java.util.ArrayList;
+import javax.swing.JLabel;
 
 public class Tuile{
 
+    private static double pheromMin = 0.002;
+    private static double pheromMax = 0.70;
     private static int distancemax = 500;
     private double pherom;//initial value to 1
     static int IDEN=0;
@@ -17,11 +22,66 @@ public class Tuile{
     private int cost = 1;//le cout de la tuile
     private boolean hasAnt = false;
     private String idAnt = "";
+    private int i,j;
+    private Vue vue;
+    private int foncee = 0;
+    private int nbfourmisCourante = 0;
     
-    public Tuile(){
+    public void inncbfourmisCourante(){
+        this.nbfourmisCourante++;
+        removeAnt();
+        showAnt();
+    }
+
+    public void initColor(){
+        vue.mesTuiles[i][j].setBackground(Color.white);
+    }
+
+    public void setBackground(Color couleur){
+        vue.mesTuiles[i][j].setBackground(couleur);
+    }
+
+    public void decnbfourmisCourante(){
+        this.nbfourmisCourante--;
+        removeAnt();
+        showAnt();
+    }
+
+    public Tuile(int i, int j, Vue vue){
         id=IDEN;
         IDEN++;
         pherom = (double) 1 / distancemax;
+        this.setI(i); this.setJ(j);
+        this.vue = vue;
+    }
+
+    public void showAnt(){
+        vue.mesTuiles[i][j].add( new JLabel(String.valueOf( this.nbfourmisCourante )) );
+        vue.mesTuiles[i][j].revalidate();
+        vue.mesTuiles[i][j].repaint();
+    }
+
+
+    public void removeAnt(){
+        vue.mesTuiles[i][j].removeAll();
+        vue.mesTuiles[i][j].revalidate();
+        vue.mesTuiles[i][j].repaint();
+    }
+
+    public int getJ() {
+        return j;
+    }
+
+    public void setJ(int j) {
+        this.j = j;
+    }
+
+    public int getI() {
+        return i;
+    }
+
+    public void setI(int i) {
+        this.i = i;
     }
 
     public void setAntID(String idAnt){
@@ -53,7 +113,7 @@ public class Tuile{
         return pherom;
     }
 
-    public void setPherom(float pherom){
+    public void setPherom(double pherom){
         this.pherom = pherom;
     }
 
@@ -77,11 +137,28 @@ public class Tuile{
     }
 
     public void vaporate(double taux){
-        this.pherom = (double) this.pherom * (1 - taux);
+        if(this.pherom > pheromMin) {
+            this.pherom = (double) this.pherom * (1 - taux);
+           /* initprintPheroms();
+            showPheroms();*/
+            if (!isColony && !isFood){
+               /* vue.mesTuiles[i][j].setBackground( vue.mesTuiles[i][j].getBackground().brighter() );
+                vue.revalidate();
+                vue.repaint();*/
+            }
+        }else this.pherom = pheromMin;
     }
 
     public void addPherom(double pherom){
-        this.pherom += pherom;
+        if (this.pherom < pheromMax){
+            this.pherom += pherom;
+            if (!isColony && !isFood && foncee<255){
+                /*removeAntfoncee += 5;
+                vue.mesTuiles[i][j].setBackground( vue.mesTuiles[i][j].getBackground().darker() );
+                vue.revalidate();
+                vue.repaint();*/
+            }
+        }else this.pherom = pheromMax;
     }
 
 }

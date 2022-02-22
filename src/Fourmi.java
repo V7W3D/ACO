@@ -5,6 +5,7 @@ import java.util.Optional;
 
 public class Fourmi {
 
+    static int quantityPherom = 1;
     static int Ident=0;
     int id;
     ArrayList<Tuile> parcours = new ArrayList<>();
@@ -36,5 +37,10 @@ public class Fourmi {
 
     public void init(){
         parcours.clear();
+    }
+
+    @Override
+    public boolean equals(Object o){
+        return ((Fourmi)o).id == this.id;
     }
 }
