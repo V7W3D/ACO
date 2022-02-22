@@ -23,6 +23,10 @@ public class Plateau {
     private Vue vue;
     private volatile Fourmi fourmiPlusRapide;
     
+    public Tuile[][] getTuiles(){
+        return this.plateau;
+    }
+
     public Plateau(int height, int width,Vue vue){
         this.height = height;
         this.width = width;
@@ -110,11 +114,11 @@ public class Plateau {
         HashMap<Tuile, Double> probs = new HashMap<Tuile, Double>();
         double sum = 0;
         for (Tuile tuiles:tuile.tuiles){
-            if (!tuiles.equals(avantDerniereTuile) && !tuiles.isColony)
+            if (!tuiles.equals(avantDerniereTuile) && !tuiles.isColony && !tuiles.isObstacle)
                 sum += Math.pow(tuiles.getPherom(), alpha) * Math.pow((double) (1/tuiles.getCost()), beta);
         }
         for (Tuile tuiles:tuile.tuiles){
-            if (!tuiles.equals(avantDerniereTuile) && !tuiles.isColony){
+            if (!tuiles.equals(avantDerniereTuile) && !tuiles.isColony && !tuiles.isObstacle){
                 double res = (Math.pow(tuiles.getPherom(), alpha)*Math.pow((double) (1/tuiles.getCost()), beta)) / sum;
                 probs.put(tuiles, res);
             }
@@ -145,6 +149,17 @@ public class Plateau {
         }
     } 
 
+    private static boolean containObstacle(ArrayList<Tuile> tuiles){
+        for (Tuile tuile:tuiles){
+            if (tuile.isObstacle) return true;
+        }
+        return false;
+    }
+
+    private void init(){
+        listeFourmis.clear();
+    }
+
     public void simulation(){
         Fourmi fourmiCourante;
         AntThread threads[] = new AntThread[nombreFourmis+nbEclaireuses];
@@ -173,6 +188,11 @@ public class Plateau {
                 }
             }
             vue.initColor();
+            //si obstacle on relance la partie
+            if (containObstacle(this.fourmiPlusRapide.parcours)){
+                init();
+                simulation();
+            }
             for (Tuile tuile:this.fourmiPlusRapide.parcours){
                 tuile.addPherom( (double) (1.5 * Fourmi.quantityPherom) / this.fourmiPlusRapide.getDistance());
                 tuile.setBackground(Color.red);
@@ -182,8 +202,8 @@ public class Plateau {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            affiche();
-            System.out.println("\n\n");
+            /*affiche();
+            System.out.println("\n\n");*/
         }
     }
 

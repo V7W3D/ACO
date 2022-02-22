@@ -16,7 +16,7 @@ public class Vue extends JFrame{
     public void initColor(){
         for(int i = 0; i < n; i++) {
             for(int j = 0; j < m; j++) {
-                mesTuiles[i][j].setBackground(Color.WHITE);
+                if (!plateau.getTuiles()[i][j].isObstacle) mesTuiles[i][j].setBackground(Color.WHITE);
            }
         }
     }
@@ -34,18 +34,31 @@ public class Vue extends JFrame{
                 textToPrint[i][j] = new JLabel("");
                 mesTuiles[i][j] = new JPanel();
                 mesTuiles[i][j].add( textToPrint[i][j] );
-                mesTuiles[i][j].addMouseListener(new MouseAdapter() {
-                    @Override
-                    public void mouseClicked(MouseEvent e) {
-
-                    }
-                });
                 mesTuiles[i][j].setBackground(new Color(255,255,255));
                 mesTuiles[i][j].setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.LIGHT_GRAY));
                 container.add(mesTuiles[i][j]);
             }
         }
         setContentPane(container);
+    }
+
+    public void init(){
+        for (int i=0;i<n;i++){
+            for (int j=0;j<m;j++){
+                int i1 = i,j1 = j;
+                mesTuiles[i][j].addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mousePressed(MouseEvent e) {
+                        plateau.getTuiles()[i1][j1].setIsObstacle(true);
+                        mesTuiles[i1][j1].setBackground( Color.black );
+                    }
+                });
+            }
+        }
+    }
+
+    public void setPlateau(Plateau plateau){
+        this.plateau = plateau;
     }
 
     public void printText(int i,int j,String text){

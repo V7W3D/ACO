@@ -9,6 +9,8 @@ public class Main {
             //public void run() {
                 Vue vue = new Vue();
                 Plateau p = new Plateau(10,10,vue);
+                vue.setPlateau(p);
+                vue.init();
                 vue.setVisible(true);
                 p.simulation();
            // }

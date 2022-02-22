@@ -36,7 +36,7 @@ public class Tuile{
     }
 
     public void showPheroms(){
-        vue.printText(i, j, String.valueOf( this.pherom * 100 ).substring(0,3));
+        vue.printText(i, j, String.valueOf( this.pherom * 100 ).substring(0,3)+ " " + (!isObstacle?"a":"o"));
     }
 
     public void setBackground(Color couleur){
@@ -122,6 +122,10 @@ public class Tuile{
         if(isFood) return "|F|";
         if (hasAnt) return "|"+idAnt+"|";
         return"| |";
+    }
+
+    public void setIsObstacle(boolean isObstacle){
+        this.isObstacle = isObstacle;
     }
 
     public void vaporate(double taux){
