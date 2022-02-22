@@ -82,11 +82,19 @@ public class Plateau {
         }
     }
 
+    private Tuile foodIsAdj(Tuile tuileCourante){
+        for (Tuile tuile:tuileCourante.tuiles){
+            if (tuile.isFood()) return tuile;
+        }
+        return null;
+    }
+
     private Tuile choixTuile(HashMap<Tuile, Double> probs, Tuile tuileCourante){
+        Tuile tuile = foodIsAdj(tuileCourante);
+        if (tuile == null) return tuile;
         double random = new Random().nextDouble();
         double cumulativeProbability = 0.0;
         for (Map.Entry<Tuile, Double> mapentry : probs.entrySet()) {
-            if (mapentry.getKey().isFood()) return mapentry.getKey();
             cumulativeProbability += mapentry.getValue(); 
             if (random <= cumulativeProbability)
                 return mapentry.getKey();
