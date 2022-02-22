@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class Tuile{
 
-    private static double pheromMin = 0.09;
+    private static double pheromMin = 0.10;
     private static double pheromMax = 0.80;
     private static int distancemax = 500;
     private double pherom;//initial value to 1
