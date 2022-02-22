@@ -10,6 +10,7 @@ public class Vue extends JFrame{
     private static final int n = 10;
     private static final int m = 10;
     private Plateau plateau;
+    private JLabel[][] textToPrint = new JLabel[n][m];
     JPanel[][] mesTuiles = new JPanel[n][m];
 
     public void initColor(){
@@ -30,7 +31,9 @@ public class Vue extends JFrame{
 
         for(int i = 0; i < n; i++) {
             for(int j = 0; j < m; j++) {
+                textToPrint[i][j] = new JLabel("");
                 mesTuiles[i][j] = new JPanel();
+                mesTuiles[i][j].add( textToPrint[i][j] );
                 mesTuiles[i][j].addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
@@ -43,5 +46,9 @@ public class Vue extends JFrame{
             }
         }
         setContentPane(container);
+    }
+
+    public void printText(int i,int j,String text){
+        textToPrint[i][j].setText(text);
     }
 }

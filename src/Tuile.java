@@ -3,12 +3,11 @@ package src;
 
 import java.awt.Color;
 import java.util.ArrayList;
-import javax.swing.JLabel;
 
 public class Tuile{
 
-    private static double pheromMin = 0.002;
-    private static double pheromMax = 0.70;
+    private static double pheromMin = 0.09;
+    private static double pheromMax = 0.80;
     private static int distancemax = 500;
     private double pherom;//initial value to 1
     static int IDEN=0;
@@ -29,12 +28,15 @@ public class Tuile{
     
     public void inncbfourmisCourante(){
         this.nbfourmisCourante++;
-        removeAnt();
-        showAnt();
+        vue.printText(i, j, String.valueOf(nbfourmisCourante));
     }
 
     public void initColor(){
         vue.mesTuiles[i][j].setBackground(Color.white);
+    }
+
+    public void showPheroms(){
+        vue.printText(i, j, String.valueOf( this.pherom * 100 ).substring(0,3));
     }
 
     public void setBackground(Color couleur){
@@ -43,8 +45,7 @@ public class Tuile{
 
     public void decnbfourmisCourante(){
         this.nbfourmisCourante--;
-        removeAnt();
-        showAnt();
+        vue.printText(i, j, String.valueOf(nbfourmisCourante) );
     }
 
     public Tuile(int i, int j, Vue vue){
@@ -53,19 +54,6 @@ public class Tuile{
         pherom = (double) 1 / distancemax;
         this.setI(i); this.setJ(j);
         this.vue = vue;
-    }
-
-    public void showAnt(){
-        vue.mesTuiles[i][j].add( new JLabel(String.valueOf( this.nbfourmisCourante )) );
-        vue.mesTuiles[i][j].revalidate();
-        vue.mesTuiles[i][j].repaint();
-    }
-
-
-    public void removeAnt(){
-        vue.mesTuiles[i][j].removeAll();
-        vue.mesTuiles[i][j].revalidate();
-        vue.mesTuiles[i][j].repaint();
     }
 
     public int getJ() {
@@ -147,6 +135,7 @@ public class Tuile{
                 vue.repaint();*/
             }
         }else this.pherom = pheromMin;
+        showPheroms();
     }
 
     public void addPherom(double pherom){
@@ -159,6 +148,7 @@ public class Tuile{
                 vue.repaint();*/
             }
         }else this.pherom = pheromMax;
+        showPheroms();
     }
 
 }

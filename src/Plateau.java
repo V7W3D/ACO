@@ -13,7 +13,7 @@ public class Plateau {
     private int height,width;
     private static int delay = 5;
     private static int alpha = 4,beta = 1;
-    private static double tauxDeVaporation = 0.5;
+    private static double tauxDeVaporation = 0.9;
     private int[] tuileDeDepart = new int[2];
     private int nombreFourmis = 5;
     private int nbEclaireuses = 5;
@@ -21,16 +21,13 @@ public class Plateau {
     private Tuile[][] plateau = new Tuile[30][30];
     boolean hungry = true;//n'a pas trouvé de nourririturre
     private Vue vue;
-    private ArrayList<Tuile> plusCourtChemin = new ArrayList<Tuile>();
-
-    /*public void setVue(Vue vue){
-        this.vue = vue;
-    }*/
+    private volatile Fourmi fourmiPlusRapide;
     
     public Plateau(int height, int width,Vue vue){
         this.height = height;
         this.width = width;
         this.vue = vue;
+        this.fourmiPlusRapide = new Fourmi();
         for(int i = 0;i<height;i++){
             for(int j = 0;j<width;j++){
                 this.plateau[i][j]=new Tuile(i,j, this.vue);
@@ -50,19 +47,19 @@ public class Plateau {
                 }
                 if(i+1<height && j-1>=0 && !plateau[i+1][j-1].isObstacle){
                     plateau[i][j].addAsAdj(plateau[i+1][j-1]);
-                    }
+                }
                 if(i-1>=0 && j-1>=0 && !plateau[i-1][j-1].isObstacle){
                         plateau[i][j].addAsAdj(plateau[i-1][j-1]);
-                    }
+                }
                 if(j-1>=0 && !plateau[i][j-1].isObstacle){
                         plateau[i][j].addAsAdj(plateau[i][j-1]);
-                    }
+                }
                 if(i-1>=0 && !plateau[i-1][j].isObstacle){
                         plateau[i][j].addAsAdj(plateau[i-1][j]);
-                    }
+                }
                 if(i+1<height && !plateau[i+1][j].isObstacle){
                         plateau[i][j].addAsAdj(plateau[i+1][j]);
-                    }
+                }
             }
         }
         tuileDeDepart[0] = 3;
@@ -91,7 +88,7 @@ public class Plateau {
 
     private Tuile choixTuile(HashMap<Tuile, Double> probs, Tuile tuileCourante){
         Tuile tuile = foodIsAdj(tuileCourante);
-        if (tuile == null) return tuile;
+        if (tuile != null) return tuile;
         double random = new Random().nextDouble();
         double cumulativeProbability = 0.0;
         for (Map.Entry<Tuile, Double> mapentry : probs.entrySet()) {
@@ -110,7 +107,6 @@ public class Plateau {
         else
             tuile = derniereTuile.get();
         if (avantDerniereTuile == null) avantDerniereTuile = tuile;
-        tuile.decnbfourmisCourante();
         HashMap<Tuile, Double> probs = new HashMap<Tuile, Double>();
         double sum = 0;
         for (Tuile tuiles:tuile.tuiles){
@@ -124,26 +120,23 @@ public class Plateau {
             }
         }
         Tuile prochaineTuile = choixTuile(probs, tuile);
-        prochaineTuile.inncbfourmisCourante();
         fourmi.parcours.add(prochaineTuile);
         return prochaineTuile.isFood();
     }
 
-    private static boolean compareCost(ArrayList<Tuile> tuiles1, ArrayList<Tuile> tuiles2){
-        int cost1 = tuiles1.size()>0 ? tuiles2.stream().map(tuile->tuile.getCost()).reduce(0, (a,b)->a+b) : 0;
-        int cost2 = tuiles2.size()>0 ? tuiles2.stream().map(tuile->tuile.getCost()).reduce(0, (a,b)->a+b) : 0;
-        return cost1 < cost2;
-    }
-
     private void deplacerEclaireuses(){
+        Fourmi lastAnt = null;
         for (int i=0;i<nbEclaireuses;i++){
             Fourmi eclaireuse = new Fourmi();
             listeFourmis.add( eclaireuse );
         }
         boolean foundFood = false;
         while (!foundFood){
-            for (int i=0;i<nbEclaireuses && !foundFood;i++)
+            for (int i=0;i<nbEclaireuses && !foundFood;i++){
+                lastAnt =  listeFourmis.get(i);
                 foundFood = moveAnt( listeFourmis.get(i) );
+            }
+            this.fourmiPlusRapide.copyParcourAndId(lastAnt);
             try {
                 Thread.sleep(delay);
             } catch (InterruptedException e) {
@@ -153,56 +146,45 @@ public class Plateau {
     } 
 
     public void simulation(){
-        /*Thread thread = new Thread(new Runnable() {
-            //@Override
-            public void run() {*/
-                boolean foundFoud;
-                int distanceplusrapide = 0;
-                Fourmi plusrapide = null;
-                deplacerEclaireuses();
-                for (int i=0;i<nombreFourmis;i++){
-                    Fourmi fourmi = new Fourmi();
-                    listeFourmis.add( fourmi );
+        Fourmi fourmiCourante;
+        AntThread threads[] = new AntThread[nombreFourmis+nbEclaireuses];
+        deplacerEclaireuses();
+
+        for (int i=0;i<nombreFourmis+nbEclaireuses;i++)
+            threads[i] = new AntThread();
+
+        for (int i=0;i<nombreFourmis;i++){
+            Fourmi fourmi = new Fourmi();
+            listeFourmis.add( fourmi );
+        }
+
+        while (true){
+            for (int i=0;i<nombreFourmis + nbEclaireuses;i++){
+                fourmiCourante = listeFourmis.get(i); 
+                threads[i].setFourmiCourante(fourmiCourante);
+                threads[i].start();     
+                threads[i].join();
+            }
+            updatePheroms();//evaporate
+            for (Fourmi fourmi:listeFourmis){
+                if (!fourmi.equals(this.fourmiPlusRapide)){
+                    for (Tuile tuile:fourmi.parcours)
+                        tuile.addPherom( (double) Fourmi.quantityPherom / fourmi.getDistance() );
                 }
-                while (true){
-                    for (int i=0;i<nombreFourmis + nbEclaireuses;i++){
-                        foundFoud = false;
-                        while (!foundFoud){
-                            foundFoud = moveAnt(listeFourmis.get(i));
-                        }
-                        System.out.println(listeFourmis.get(i).getDistance());
-                        if (compareCost(listeFourmis.get(i).parcours, this.plusCourtChemin) ||
-                                this.plusCourtChemin.size() == 0){
-                            this.plusCourtChemin.clear();
-                            this.plusCourtChemin.addAll(listeFourmis.get(i).parcours);
-                            plusrapide = listeFourmis.get(i);
-                            distanceplusrapide = plusrapide.getDistance();
-                        }
-                        listeFourmis.get(i).init();
-                    }
-                    updatePheroms();//evaporate
-                    for (Fourmi fourmi:listeFourmis){
-                        if (distanceplusrapide != 0 && fourmi.equals(plusrapide)){
-                            for (Tuile tuile:fourmi.parcours)
-                                tuile.addPherom( (double) Fourmi.quantityPherom / fourmi.getDistance() );
-                        }
-                    }
-                    vue.initColor();
-                    for (Tuile tuile:this.plusCourtChemin){
-                        tuile.addPherom( (double) (2 * Fourmi.quantityPherom) / distanceplusrapide );
-                        tuile.setBackground(Color.red);
-                    }
-                    try {
-                        Thread.sleep(delay);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    System.out.println("\n\n");
-                    affiche();
-                }
-            /*}
-        });
-        thread.start();*/
+            }
+            vue.initColor();
+            for (Tuile tuile:this.fourmiPlusRapide.parcours){
+                tuile.addPherom( (double) (1.5 * Fourmi.quantityPherom) / this.fourmiPlusRapide.getDistance());
+                tuile.setBackground(Color.red);
+            }
+            try {
+                Thread.sleep(delay);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            affiche();
+            System.out.println("\n\n");
+        }
     }
 
     public void affiche(){
@@ -212,5 +194,45 @@ public class Plateau {
                 System.out.print(plateau[i][j].getPherom()*100+" | ");
             }
         }
+    }
+
+    class AntThread implements Runnable {
+
+        private Fourmi fourmiCourante;
+        private Thread thread;
+        
+        public AntThread(){}
+
+        public AntThread(Fourmi fourmiCourante) {
+            this.fourmiCourante = fourmiCourante;
+        }
+            
+        @Override
+        public void run() {
+            var foundFoud = false;
+            while (!foundFoud)
+                foundFoud = moveAnt(fourmiCourante);
+            if (fourmiCourante.getDistance() < fourmiPlusRapide.getDistance())
+                fourmiPlusRapide.copyParcourAndId(fourmiCourante);//make a copy of the ant
+            fourmiCourante.init();               
+        }
+
+        public void setFourmiCourante(Fourmi fourmi){
+            this.fourmiCourante = fourmi;
+        }
+
+        public void start(){
+            thread = new Thread(this);
+            thread.start();
+        }
+
+        public void join(){
+            try {
+                thread.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        
     }
 }

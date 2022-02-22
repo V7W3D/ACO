@@ -41,6 +41,14 @@ public class Fourmi {
 
     @Override
     public boolean equals(Object o){
+        if (o == null || !( o instanceof Fourmi)) return false;
         return ((Fourmi)o).id == this.id;
+    }
+
+
+    public void copyParcourAndId(Fourmi fourmi){
+        this.parcours.clear();
+        this.parcours.addAll( fourmi.parcours );
+        this.id = fourmi.id;
     }
 }
