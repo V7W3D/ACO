@@ -1,6 +1,5 @@
 
 import java.util.ArrayList;
-import java.awt.*;
 
 public class Tuile{
 

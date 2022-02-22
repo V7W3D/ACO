@@ -17,13 +17,9 @@ public class Plateau {
     private int nbEclaireuses = 50;
     private ArrayList<Fourmi> listeFourmis = new ArrayList<Fourmi>();
     private Tuile[][] plateau = new Tuile[30][30];
-    boolean hungry = true;//n'a pas trouvé de nourririturre
+    boolean hungry = true;//n'a pas trouvé de nourriture
     private Vue vue;
 
-    /*public void setVue(Vue vue){
-        this.vue = vue;
-    }*/
-    
     public Plateau(int height, int width,Vue vue){
         this.height = height;
         this.width = width;
@@ -146,31 +142,25 @@ public class Plateau {
     } 
 
     public void simulation(){
-        /*Thread thread = new Thread(new Runnable() {
-            //@Override
-            public void run() {*/
-                deplacerEclaireuses();
-                for (int i=0;i<nombreFourmis - nbEclaireuses;i++){
-                    Fourmi fourmi = new Fourmi();
-                    listeFourmis.add( fourmi );
-                }
-                while (true){
-                    for (int i=0;i<nombreFourmis;i++){
-                        moveAnt(listeFourmis.get(i));
-                    }
-                    updatePheroms();
-                    try {
-                        Thread.sleep(delay);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    System.out.println("\n\n");
-                    affiche();
-                }
-            /*}
-        });
-        thread.start();*/
-    }
+        deplacerEclaireuses();
+        for (int i=0;i<nombreFourmis - nbEclaireuses;i++){
+            Fourmi fourmi = new Fourmi();
+            listeFourmis.add( fourmi );
+        }
+        while (true){
+            for (int i=0;i<nombreFourmis;i++){
+                moveAnt(listeFourmis.get(i));
+            }
+            updatePheroms();
+            try {
+                Thread.sleep(delay);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            System.out.println("\n\n");
+            affiche();
+        }
+}
 
     public void affiche(){
         for(int i = 0;i<30;i++){
