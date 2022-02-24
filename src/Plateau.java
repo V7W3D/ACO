@@ -195,7 +195,7 @@ public class Plateau {
             }
             for (Tuile tuile:this.fourmiPlusRapide.parcours){
                 tuile.addPherom( (double) (1.5 * Fourmi.quantityPherom) / this.fourmiPlusRapide.getDistance());
-                tuile.setBackground(Color.red);
+                if(!tuile.isFood()) tuile.setBackground(Color.red);
             }
             try {
                 Thread.sleep(delay);
