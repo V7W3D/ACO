@@ -5,7 +5,7 @@ import java.util.Optional;
 
 public class Fourmi {
 
-    static int quantityPherom = 1;
+    static double quantityPherom = 0.1;
     static int Ident=0;
     int id;
     ArrayList<Tuile> parcours = new ArrayList<>();

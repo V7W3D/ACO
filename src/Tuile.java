@@ -118,10 +118,9 @@ public class Tuile{
     }
 
     public String toString(){
-        if(isColony) return"|C|";
-        if(isFood) return "|F|";
-        if (hasAnt) return "|"+idAnt+"|";
-        return"| |";
+        if(isColony) return"This is the colony";
+        if(isFood) return "This is the food";
+        else return "This is the tile("+i+","+j+") The Pherom level here is : "+pherom; 
     }
 
     public void setIsObstacle(boolean isObstacle){
