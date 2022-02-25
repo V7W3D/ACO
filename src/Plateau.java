@@ -12,8 +12,8 @@ public class Plateau {
 
     private int height,width;
     private static int delay = 5;
-    private static int alpha = 4,beta = 1;
-    private static double tauxDeVaporation = 0.1;
+    private static int alpha = 4,beta = 0;
+    private static double tauxDeVaporation = 0.03;
     private int[] tuileDeDepart = new int[2];
     private int nombreFourmis = 5;
     private int nbEclaireuses = 5;
