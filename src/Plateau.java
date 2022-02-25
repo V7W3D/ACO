@@ -12,8 +12,8 @@ public class Plateau {
 
     private int height,width;
     private static int delay = 5;
-    private static int alpha = 4,beta = 1;
-    private static double tauxDeVaporation = 0.9;
+    private static int alpha = 4,beta = 0;
+    private static double tauxDeVaporation = 0.1;
     private int[] tuileDeDepart = new int[2];
     private int nombreFourmis = 5;
     private int nbEclaireuses = 5;
@@ -68,10 +68,10 @@ public class Plateau {
         }
         tuileDeDepart[0] = 3;
         tuileDeDepart[1] = 0;
-        vue.mesTuiles[3][0].setBackground( Color.RED );
+        vue.mesTuiles[3][0].setBackground( Color.BLUE );
         plateau[3][0].setColony(true);
         plateau[9][9].setFood(true);
-        vue.mesTuiles[9][9].setBackground( Color.green );
+        vue.mesTuiles[9][9].setBackground( Color.GREEN );
     }
 
     //vaporisation des pheromones
@@ -195,7 +195,7 @@ public class Plateau {
             }
             for (Tuile tuile:this.fourmiPlusRapide.parcours){
                 tuile.addPherom( (double) (1.5 * Fourmi.quantityPherom) / this.fourmiPlusRapide.getDistance());
-                tuile.setBackground(Color.red);
+                if(!tuile.isFood()) tuile.setBackground(Color.red);
             }
             try {
                 Thread.sleep(delay);
