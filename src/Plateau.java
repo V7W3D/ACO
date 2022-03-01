@@ -110,7 +110,7 @@ public class Plateau {
                         }
                         for (int i=0;i< height;i++){
                             for (int j=0;j< width;j++){
-                                if (!plateau[i][j].isObstacle) plateau[i][j].vaporate(tauxDeVaporation);
+                                if ( !plateau[i][j].isObstacle ) plateau[i][j].vaporate(tauxDeVaporation);
                             }
                         }
                     }
