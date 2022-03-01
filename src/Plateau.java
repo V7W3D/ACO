@@ -166,11 +166,11 @@ public class Plateau {
         prochaineTuile.hasAnt = true;
         boolean remove = false;
         ArrayList<Tuile> tmp = new ArrayList<Tuile>(fourmi.parcours);
-        //suppression des boucles inutiles
+        //suppression des boucles inutiles pour optimiser l'algo
         if (fourmi.wentFromIt(prochaineTuile)){
             for (Tuile tuileP:fourmi.parcours){
                 if (tuileP.equals(prochaineTuile))
-                    remove=true;
+                    remove = true;
                 if (remove)
                     tmp.remove(tuileP);
             }
