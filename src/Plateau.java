@@ -20,6 +20,7 @@ public class Plateau {
     private int nombreFourmis = 10;
     private ArrayList<Fourmi> listeFourmis = new ArrayList<Fourmi>();
     private Tuile[][] plateau = new Tuile[30][30];
+    private AntThread threads[];
     private Vue vue;
     private volatile Fourmi fourmiPlusRapide;
     
@@ -199,7 +200,7 @@ public class Plateau {
 
     public void simulation(){
         Fourmi fourmiCourante;
-        AntThread threads[] = new AntThread[nombreFourmis];
+        this.threads = new AntThread[nombreFourmis];
     
         for (int i=0; i<nombreFourmis; i++)
             threads[i] = new AntThread();
@@ -209,9 +210,12 @@ public class Plateau {
             listeFourmis.add( fourmi );
         }
 
+        //thread des pheromones
         Thread trehadPheroms = initupdatePheroms();
+        //thread des couleurs
         Thread threadColors = updateColors();
 
+        //demarer les threads avec une fourmi
         for (int i=0;i<nombreFourmis;i++){
             fourmiCourante = listeFourmis.get(i); 
             threads[i].setFourmiCourante(fourmiCourante);
@@ -222,6 +226,7 @@ public class Plateau {
         trehadPheroms.start();
         threadColors.start();
 
+        //attendre que les threads terminent
         for (int i=0;i<nombreFourmis;i++)
             threads[i].join();
 
@@ -250,17 +255,38 @@ public class Plateau {
         }
     }
 
+    public void pauseAllThreads(){
+        for (AntThread ant:threads){
+            //set the pause variable to true
+            ant.setIsPause(true);
+            //pause the thread
+            ant.pause();
+        }
+    }
+
+    public void restartAllThreads(){
+        for (AntThread ant:threads)
+            ant.setIsPause(false);
+    }
+
     class AntThread implements Runnable {
 
         private Fourmi fourmiCourante;
         private Thread thread;
         private boolean isPause;
         private boolean isAlive = true;
+        private static int idThread = 0;
+        private int id;
         
-        public AntThread(){}
+        public AntThread(){
+            id = idThread;
+            idThread++;
+        }
 
         public AntThread(Fourmi fourmiCourante) {
             this.fourmiCourante = fourmiCourante;
+            id = idThread;
+            idThread++;
         }
             
         @Override
