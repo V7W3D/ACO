@@ -257,17 +257,20 @@ public class Plateau {
 
     public void pauseAllThreads(){
         for (AntThread ant:threads){
-            //set the pause variable to true
-            ant.setIsPause(true);
-            //pause the thread
-            ant.pause();
+            if (ant.isAlive){
+                //set the pause variable to true
+                ant.setIsPause(true);
+                //pause the thread
+                ant.pause();
+            }
         }
     }
 
     public void restartAllThreads(){
         for (AntThread ant:threads)
-            ant.setIsPause(false);
+            if (ant.isAlive) ant.setIsPause(false);
     }
+
 
     class AntThread implements Runnable {
 
@@ -275,18 +278,11 @@ public class Plateau {
         private Thread thread;
         private boolean isPause;
         private boolean isAlive = true;
-        private static int idThread = 0;
-        private int id;
         
-        public AntThread(){
-            id = idThread;
-            idThread++;
-        }
+        public AntThread(){}
 
         public AntThread(Fourmi fourmiCourante) {
             this.fourmiCourante = fourmiCourante;
-            id = idThread;
-            idThread++;
         }
             
         @Override
@@ -299,6 +295,7 @@ public class Plateau {
                     if (fourmiCourante.getDistance() > maxDistanceAnt){
                         isAlive = false;
                         listeFourmis.remove(fourmiCourante);
+                        //end thread
                         return;
                     }
                 }else{
