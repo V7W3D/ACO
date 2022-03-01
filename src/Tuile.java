@@ -6,9 +6,8 @@ import java.util.ArrayList;
 
 public class Tuile{
 
-    private static double pheromMin = 0.10;
-    private static double pheromMax = 0.80;
-    private static int distancemax = 500;
+    public static double pheromMin = 0.10;
+    public static double pheromMax = 0.80;
     private double pherom;//initial value to 1
     static int IDEN=0;
     int id;
@@ -17,13 +16,11 @@ public class Tuile{
     private boolean isFood = false;
     boolean isObstacle = false;
     ArrayList<Tuile> tuiles = new ArrayList<>();
-    boolean dejaVisite = false;
     private int cost = 1;//le cout de la tuile
-    private boolean hasAnt = false;
+    boolean hasAnt = false;
     private String idAnt = "";
     private int i,j;
     private Vue vue;
-    private int foncee = 0;
     private int nbfourmisCourante = 0;
     
     public void inncbfourmisCourante(){
@@ -36,7 +33,7 @@ public class Tuile{
     }
 
     public void showPheroms(){
-        vue.printText(i, j, String.valueOf( this.pherom * 100 ).substring(0,3)+ " " + (!isObstacle?"a":"o"));
+        vue.printText(i, j, String.valueOf( this.pherom * 100 ).substring(0,3));
     }
 
     public void setBackground(Color couleur){
@@ -51,7 +48,7 @@ public class Tuile{
     public Tuile(int i, int j, Vue vue){
         id=IDEN;
         IDEN++;
-        pherom = (double) 1 / distancemax;
+        pherom = pheromMin;
         this.setI(i); this.setJ(j);
         this.vue = vue;
     }
@@ -129,30 +126,20 @@ public class Tuile{
     }
 
     public void vaporate(double taux){
-        if(this.pherom > pheromMin) {
-            this.pherom = (double) this.pherom * (1 - taux);
-           /* initprintPheroms();
-            showPheroms();*/
-            if (!isColony && !isFood){
-               /* vue.mesTuiles[i][j].setBackground( vue.mesTuiles[i][j].getBackground().brighter() );
-                vue.revalidate();
-                vue.repaint();*/
-            }
-        }else this.pherom = pheromMin;
+        this.pherom = (double) this.pherom * (1 - taux);
+        if(this.pherom < pheromMin) this.pherom = pheromMin;
         showPheroms();
     }
 
     public void addPherom(double pherom){
-        if (this.pherom < pheromMax){
+        if (this.pherom + pherom  < pheromMax){
             this.pherom += pherom;
-            if (!isColony && !isFood && foncee<255){
-                /*removeAntfoncee += 5;
-                vue.mesTuiles[i][j].setBackground( vue.mesTuiles[i][j].getBackground().darker() );
-                vue.revalidate();
-                vue.repaint();*/
-            }
         }else this.pherom = pheromMax;
         showPheroms();
+    }
+
+    public void setPhermoToMin(){
+        pherom = pheromMin;
     }
 
 }

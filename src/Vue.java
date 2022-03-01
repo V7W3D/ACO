@@ -49,8 +49,13 @@ public class Vue extends JFrame{
                 mesTuiles[i][j].addMouseListener(new MouseAdapter() {
                     @Override
                     public void mousePressed(MouseEvent e) {
-                        plateau.getTuiles()[i1][j1].setIsObstacle(true);
-                        mesTuiles[i1][j1].setBackground( Color.black );
+                        if (plateau.getTuiles()[i1][j1].isObstacle){
+                            plateau.getTuiles()[i1][j1].setIsObstacle(false);
+                            mesTuiles[i1][j1].setBackground( Color.white );
+                        }else{
+                            plateau.getTuiles()[i1][j1].setIsObstacle(true);
+                            mesTuiles[i1][j1].setBackground( Color.black );
+                        }
                     }
                 });
             }

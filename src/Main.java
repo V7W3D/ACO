@@ -12,7 +12,7 @@ public class Main {
                 vue.setPlateau(p);
                 vue.init();
                 vue.setVisible(true);
-                p.simulation();
+                p.simulation(false);
            // }
         //});
     }
