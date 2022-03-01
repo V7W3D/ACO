@@ -98,7 +98,7 @@ public class Plateau {
         }
         tuileDeDepart[0] = 3;
         tuileDeDepart[1] = 0;
-        vue.mesTuiles[3][0].setBackground( Color.RED );
+        vue.mesTuiles[3][0].setBackground( Color.cyan );
         plateau[3][0].setColony(true);
         plateau[9][9].setFood(true);
         vue.mesTuiles[9][9].setBackground( Color.green );
