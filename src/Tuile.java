@@ -87,6 +87,10 @@ public class Tuile{
         return pherom;
     }
 
+    public boolean isColony(){
+        return isColony;
+    }
+
     public void setPherom(double pherom){
         this.pherom = pherom;
     }

@@ -11,7 +11,9 @@ import java.util.Random;
 public class Plateau {
 
     private int maxDistanceAnt;
+    //delai d'evaporation chaque 4s
     private static int delayPheroms = 4000;
+    //delai de deplacement de chaque fourmi chaque 100ms
     private static int delayAnt = 100;
     private int height,width;
     private static int alpha = 5,beta = 1;
@@ -35,14 +37,17 @@ public class Plateau {
                     
                     for (int i=0;i<height ;i++){
                         for (int j=0;j<width ;j++){
-                            if (plateau[i][j].hasAnt) vue.printText(i,j,"A");
-                            else vue.printText(i,j,"");
-                            double pherom = plateau[i][j].getPherom();
-                            if (pherom == Tuile.pheromMin) pherom = 0;
-                            else if (pherom == Tuile.pheromMax) pherom = 1;
-                            double qtt = 1 - pherom;
-                            int color =(int)(255 * qtt);
-                            if (!plateau[i][j].isObstacle) vue.mesTuiles[i][j].setBackground( new Color(255, color, color) );
+                            if (!plateau[i][j].isObstacle && !plateau[i][j].isColony() && !plateau[i][j].isFood()){
+                                //plus il y'a de pheromones plus la couleur est rouge
+                                if (plateau[i][j].hasAnt) vue.printText(i,j,"A");
+                                else vue.printText(i,j,"");
+                                double pherom = plateau[i][j].getPherom();
+                                if (pherom == Tuile.pheromMin) pherom = 0;
+                                else if (pherom == Tuile.pheromMax) pherom = 1;
+                                double qtt = 1 - pherom;
+                                int color =(int)(255 * qtt);
+                                vue.mesTuiles[i][j].setBackground( new Color(255, color, color) );
+                            }
                         }
                     }
                 }
@@ -104,6 +109,7 @@ public class Plateau {
         Thread threadPheroms = new Thread(new Runnable() {
             public void run(){
                 while (true){
+                        //attendre le temps de : delayPheroms avant chaque evaporation
                         try {
                             Thread.sleep(delayPheroms);
                         } catch (InterruptedException e) {
