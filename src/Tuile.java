@@ -21,13 +21,7 @@ public class Tuile{
     private String idAnt = "";
     private int i,j;
     private Vue vue;
-    private int nbfourmisCourante = 0;
     
-    public void inncbfourmisCourante(){
-        this.nbfourmisCourante++;
-        vue.printText(i, j, String.valueOf(nbfourmisCourante));
-    }
-
     public void initColor(){
         vue.mesTuiles[i][j].setBackground(Color.white);
     }
@@ -38,11 +32,6 @@ public class Tuile{
 
     public void setBackground(Color couleur){
         vue.mesTuiles[i][j].setBackground(couleur);
-    }
-
-    public void decnbfourmisCourante(){
-        this.nbfourmisCourante--;
-        vue.printText(i, j, String.valueOf(nbfourmisCourante) );
     }
 
     public Tuile(int i, int j, Vue vue){

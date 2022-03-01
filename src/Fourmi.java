@@ -52,7 +52,6 @@ public class Fourmi {
         return ((Fourmi)o).id == this.id;
     }
 
-
     public void copyParcourAndId(Fourmi fourmi){
         this.parcours.clear();
         this.parcours.addAll( fourmi.parcours );
@@ -64,10 +63,4 @@ public class Fourmi {
         this.parcours.addAll( parcour );
     }
 
-    public boolean visited(Tuile tuile){
-        for (Tuile tuileP:parcours){
-            if (tuileP.equals(tuile)) return true;
-        }
-        return false;
-    }
 }

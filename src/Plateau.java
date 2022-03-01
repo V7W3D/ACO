@@ -54,7 +54,7 @@ public class Plateau {
         this.height = height;
         this.width = width;
         this.vue = vue;
-        maxDistanceAnt = height * width * 100;
+        this.maxDistanceAnt = height * width * 100;
         this.fourmiPlusRapide = new Fourmi();
         for(int i = 0;i<height;i++){
             for(int j = 0;j<width;j++){
@@ -197,11 +197,11 @@ public class Plateau {
         }
     }
 
-    public void simulation(boolean restarted){
+    public void simulation(){
         Fourmi fourmiCourante;
         AntThread threads[] = new AntThread[nombreFourmis];
     
-        for (int i=0;!restarted && i<nombreFourmis;i++)
+        for (int i=0; i<nombreFourmis; i++)
             threads[i] = new AntThread();
 
         for (int i=0;i<nombreFourmis;i++){
