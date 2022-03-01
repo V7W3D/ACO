@@ -10,7 +10,7 @@ import java.util.Random;
 
 public class Plateau {
 
-    private int maxDistance;
+    private int maxDistanceAnt;
     private static int delayPheroms = 4000;
     private static int delayAnt = 100;
     private int height,width;
@@ -54,7 +54,7 @@ public class Plateau {
         this.height = height;
         this.width = width;
         this.vue = vue;
-        maxDistance = height * width * 100;
+        maxDistanceAnt = height * width * 100;
         this.fourmiPlusRapide = new Fourmi();
         for(int i = 0;i<height;i++){
             for(int j = 0;j<width;j++){
@@ -270,7 +270,7 @@ public class Plateau {
                 if (!foundFoud){ 
                     pause(delayAnt);
                     foundFoud = moveAnt(fourmiCourante);
-                    if (fourmiCourante.getDistance() > maxDistance){
+                    if (fourmiCourante.getDistance() > maxDistanceAnt){
                         isAlive = false;
                         listeFourmis.remove(fourmiCourante);
                         return;
