@@ -32,8 +32,8 @@ public class Plateau {
             public void run(){
                 while (true){
                     
-                    for (int i=0;i<height;i++){
-                        for (int j=0;j<width;j++){
+                    for (int i=0;i<height ;i++){
+                        for (int j=0;j<width ;j++){
                             if (plateau[i][j].hasAnt) vue.printText(i,j,"A");
                             else vue.printText(i,j,"");
                             double pherom = plateau[i][j].getPherom();
