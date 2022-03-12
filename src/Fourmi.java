@@ -23,6 +23,13 @@ public class Fourmi {
             return parcours.get(parcours.size() - 2);
     }
 
+    public boolean wentFromIt(Tuile tuile){
+        for (Tuile tuileP:parcours){
+            if (tuileP.equals(tuile)) return true;
+        }
+        return false;
+    }
+
     public int getDistance(){
         int distance = 0;
         for (Tuile tuile:parcours){
@@ -45,10 +52,15 @@ public class Fourmi {
         return ((Fourmi)o).id == this.id;
     }
 
-
     public void copyParcourAndId(Fourmi fourmi){
         this.parcours.clear();
         this.parcours.addAll( fourmi.parcours );
         this.id = fourmi.id;
     }
+
+    public void copyParcour(ArrayList<Tuile> parcour){
+        this.parcours.clear();
+        this.parcours.addAll( parcour );
+    }
+
 }
