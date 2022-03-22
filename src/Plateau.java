@@ -17,11 +17,11 @@ public class Plateau {
     private static int delayAnt = 100;
     private int height,width;
     private static int alpha = 5,beta = 1;
-    private static double tauxDeVaporation = 0.05;//5%
+    private double tauxDeVaporation = 0.05;//5%
     private int[] tuileDeDepart = new int[2];
     private int nombreFourmis = 10;
     private ArrayList<Fourmi> listeFourmis = new ArrayList<Fourmi>();
-    private Tuile[][] plateau = new Tuile[30][30];
+    private Tuile[][] plateau;
     private AntThread threads[];
     private Thread[] threadsColorAndPheroms;
     private Vue vue;
@@ -30,6 +30,11 @@ public class Plateau {
     
     public Tuile[][] getTuiles(){
         return this.plateau;
+    }
+
+    public void setVaporateRate(double rate){
+        assert(rate < 1 && rate > 0);
+        this.tauxDeVaporation = rate;
     }
 
     public Thread updateColors(){
@@ -41,13 +46,13 @@ public class Plateau {
                         for (int j=0;j<width ;j++){
                             if (!plateau[i][j].isObstacle && !plateau[i][j].isColony() && !plateau[i][j].isFood()){
                                 //plus il y'a de pheromones plus la couleur est rouge
-                                if (plateau[i][j].hasAnt) vue.printText(i,j,"A");
-                                else vue.printText(i,j,"");
+                                if (plateau[i][j].hasAnt) vue.printAnt(i,j);
+                                else vue.removeAnt(i,j);
                                 double pherom = plateau[i][j].getPherom();
                                 if (pherom == Tuile.pheromMin) pherom = 0;
                                 else if (pherom == Tuile.pheromMax) pherom = 1;
                                 double qtt = 1 - pherom;
-                                int color =(int)(255 * qtt);
+                                int color = (int)(255 * qtt);
                                 vue.mesTuiles[i][j].setBackground( new Color(255, color, color) );
                             }
                         }
@@ -61,8 +66,9 @@ public class Plateau {
     public Plateau(int height, int width,Vue vue){
         this.height = height;
         this.width = width;
+        plateau = new Tuile[height][width];
         this.vue = vue;
-        this.maxDistanceAnt = height * width * 100;
+        this.maxDistanceAnt = height * width * 10;
         this.fourmiPlusRapide = new Fourmi();
         for(int i = 0;i<height;i++){
             for(int j = 0;j<width;j++){
@@ -100,10 +106,8 @@ public class Plateau {
         }
         tuileDeDepart[0] = 3;
         tuileDeDepart[1] = 0;
-        vue.mesTuiles[3][0].setBackground( Color.cyan );
         plateau[3][0].setColony(true);
         plateau[9][9].setFood(true);
-        vue.mesTuiles[9][9].setBackground( Color.green );
     }
 
     //vaporisation des pheromones
@@ -171,7 +175,6 @@ public class Plateau {
         }
         Tuile prochaineTuile = choixTuile(probs, tuile);
         fourmi.parcours.add(prochaineTuile);
-        //prochaineTuile.addPherom( Fourmi.quantityPherom );
         prochaineTuile.hasAnt = true;
         boolean remove = false;
         ArrayList<Tuile> tmp = new ArrayList<Tuile>(fourmi.parcours);
