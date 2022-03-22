@@ -10,6 +10,7 @@ public class Main {
         vue.setPlateau(p);
         vue.init();
         vue.setVisible(true);
+        //lance la simulation
         p.simulation();
     }
 }

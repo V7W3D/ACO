@@ -37,7 +37,7 @@ public class Plateau {
         this.tauxDeVaporation = rate;
     }
 
-    public Thread updateColors(){
+    public Thread updateColors(){    
         Thread thread = new Thread(new Runnable(){
             public void run(){
                 while (!pauseColorsAndPheromsUpdate){
