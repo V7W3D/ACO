@@ -14,7 +14,7 @@ public class Plateau {
     private static double tauxDeVaporation = 0.01;
     private int[] tuileDeDepart = new int[2];
     private int nombreFourmis = 200;
-    private int nbEclaireuses = 50;
+    private int nbEclaireuses = 100;
     private ArrayList<Fourmi> listeFourmis = new ArrayList<Fourmi>();
     private Tuile[][] plateau = new Tuile[30][30];
     boolean hungry = true;//n'a pas trouvé de nourriture
@@ -98,11 +98,11 @@ public class Plateau {
         HashMap<Tuile, Double> probs = new HashMap<Tuile, Double>();
         double sum = 0;
         for (Tuile tuiles:tuile.tuiles){
-            if (!tuiles.equals(avantDerniereTuile) && !tuiles.hasAnt() && !tuiles.isColony)
+            if (!tuiles.equals(avantDerniereTuile) && !tuiles.isColony)
                 sum += Math.pow(tuiles.getPherom(), alpha)*Math.pow((double) (1/tuiles.getCost()), beta);
         }
         for (Tuile tuiles:tuile.tuiles){
-            if (!tuiles.equals(avantDerniereTuile) && !tuiles.hasAnt() && !tuiles.isColony){
+            if (!tuiles.equals(avantDerniereTuile) && !tuiles.isColony){
                 double res = (Math.pow(tuiles.getPherom(), alpha)*Math.pow((double) (1/tuiles.getCost()), beta)) / sum;
                 probs.put(tuiles, res);
             }
@@ -118,6 +118,17 @@ public class Plateau {
             fourmi.parcours.add(prochaineTuile);
             prochaineTuile.setAnt(true);
             prochaineTuile.setAntID(String.valueOf( fourmi.id ));
+            /*if(fourmi.parcours.contains(prochaineTuile)){     //ELIMINER LES BOUCLES DANS LE PARCOURS
+                int i = 0;
+                int k = -1;
+                for(Tuile t : fourmi.parcours){
+                    if(t.equals(prochaineTuile)) k = i;
+                    else i++;
+                }
+                for(int l = k;l<fourmi.parcours.size();i++){
+                    fourmi.parcours.remove(l);
+                }
+            }*/
         }
         return prochaineTuile.isFood();
     }
