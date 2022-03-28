@@ -62,8 +62,11 @@ public class Vue extends JFrame{
 
     private JMenuBar initMenuBar(){
         JMenuBar menu = new JMenuBar();
+        JMenu menuOPtions = new JMenu("Options");
         JMenuItem pause = new JMenuItem("Pause");
         JMenuItem restart = new JMenuItem("Restart");
+        menuOPtions.add(pause);
+        menuOPtions.add(restart);
         pause.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -76,8 +79,7 @@ public class Vue extends JFrame{
                 plateau.restartAllThreads(); 
             }
         });
-        menu.add(restart);
-        menu.add(pause);
+        menu.add(menuOPtions);
         return menu;
     }
 
