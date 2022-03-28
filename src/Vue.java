@@ -4,6 +4,8 @@ import javax.swing.*;
 import javax.swing.ImageIcon;
 import java.awt.*;
 import java.awt.event.*;
+import javax.swing.JMenuBar;
+
 
 public class Vue extends JFrame{
     private static final int hauteur = 600;
@@ -15,6 +17,7 @@ public class Vue extends JFrame{
     JPanel[][] mesTuiles;
     private String ressourcePath;
     private ImageIcon iconeAntResized;
+    private JMenuBar menuBar;
 
 
     public void initColor(){
@@ -57,7 +60,30 @@ public class Vue extends JFrame{
         setContentPane(container);
     }
 
+    private JMenuBar initMenuBar(){
+        JMenuBar menu = new JMenuBar();
+        JMenuItem pause = new JMenuItem("Pause");
+        JMenuItem restart = new JMenuItem("Restart");
+        pause.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                plateau.pauseAllThreads(); 
+            }
+        });
+        restart.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                plateau.restartAllThreads(); 
+            }
+        });
+        menu.add(restart);
+        menu.add(pause);
+        return menu;
+    }
+
     public void init(){
+        menuBar = initMenuBar();
+        setJMenuBar(menuBar);
         for (int i=0;i<n;i++){
             for (int j=0;j<m;j++){
                 if (plateau.getTuiles()[i][j].isFood())

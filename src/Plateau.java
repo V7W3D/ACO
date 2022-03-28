@@ -26,7 +26,7 @@ public class Plateau {
     private Thread[] threadsColorAndPheroms;
     private Vue vue;
     private volatile Fourmi fourmiPlusRapide;
-    private boolean pauseColorsAndPheromsUpdate = false;
+    private boolean pauseColorsAndPheromsAndAntUpdate = false;
     
     public Tuile[][] getTuiles(){
         return this.plateau;
@@ -40,7 +40,7 @@ public class Plateau {
     public Thread updateColors(){    
         Thread thread = new Thread(new Runnable(){
             public void run(){
-                while (!pauseColorsAndPheromsUpdate){
+                while (!pauseColorsAndPheromsAndAntUpdate){
                     
                     for (int i=0;i<height ;i++){
                         for (int j=0;j<width ;j++){
@@ -114,7 +114,7 @@ public class Plateau {
     private Thread initupdatePheroms(){
         Thread threadPheroms = new Thread(new Runnable() {
             public void run(){
-                while (!pauseColorsAndPheromsUpdate){
+                while (!pauseColorsAndPheromsAndAntUpdate){
                         //attendre le temps de : delayPheroms avant chaque evaporation
                         try {
                             Thread.sleep(delayPheroms);
@@ -240,33 +240,12 @@ public class Plateau {
         }
     }
 
-    public void affiche(){
-        for(int i = 0;i<height;i++){
-            System.out.println();
-            for(int j = 0;j<width;j++){
-                System.out.print(plateau[i][j].getPherom()*100+" | ");
-            }
-        }
-    }
-
     public void pauseAllThreads(){
-        for (AntThread ant:threads){
-            if (ant.isAlive){
-                //set the pause variable to true
-                ant.setIsPause(true);
-                //pause the thread
-                ant.pause();
-                //pause the update colors and threads
-                this.pauseColorsAndPheromsUpdate = true;
-            }
-        }
+        this.pauseColorsAndPheromsAndAntUpdate = true;
     }
 
     public void restartAllThreads(){
-        for (AntThread ant:threads)
-            if (ant.isAlive) ant.setIsPause(false);
-        
-        this.pauseColorsAndPheromsUpdate = false;
+        this.pauseColorsAndPheromsAndAntUpdate = false;
         threadsColorAndPheroms[0].start();
         threadsColorAndPheroms[1].start();
     }
@@ -288,7 +267,7 @@ public class Plateau {
         @Override
         public synchronized void run() {
             var foundFoud = false;
-            while (isAlive){
+            while (isAlive && !pauseColorsAndPheromsAndAntUpdate){
                 if (!foundFoud){ 
                     pause(delayAnt);
                     foundFoud = moveAnt(fourmiCourante);

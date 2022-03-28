@@ -2,7 +2,7 @@ package src;
 
 public class Main {
 
-    private static int height = 10, width = 10;
+    public static int height = 10, width = 10;
 
     public static void main(String[] args){
         Vue vue = new Vue(height, width);
