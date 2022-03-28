@@ -130,4 +130,8 @@ public class Tuile{
         pherom = pheromMin;
     }
 
+    public void setPhermoToMin(){
+        pherom = pheromMin;
+    }
+
 }
