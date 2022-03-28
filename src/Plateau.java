@@ -26,7 +26,7 @@ public class Plateau {
     private Thread[] threadsColorAndPheroms;
     private Vue vue;
     private volatile Fourmi fourmiPlusRapide;
-    private boolean pauseColorsAndPheromsAndAntUpdate = false;
+    private volatile boolean pauseColorsAndPheromsAndAntUpdate = false;
     
     public Tuile[][] getTuiles(){
         return this.plateau;
@@ -40,8 +40,10 @@ public class Plateau {
     public Thread updateColors(){    
         Thread thread = new Thread(new Runnable(){
             public void run(){
-                while (!pauseColorsAndPheromsAndAntUpdate){
-                    
+                while (true){
+                    while (pauseColorsAndPheromsAndAntUpdate){
+                        AntThread.pause(100);
+                    }
                     for (int i=0;i<height ;i++){
                         for (int j=0;j<width ;j++){
                             if (!plateau[i][j].isObstacle && !plateau[i][j].isColony() && !plateau[i][j].isFood()){
@@ -114,7 +116,10 @@ public class Plateau {
     private Thread initupdatePheroms(){
         Thread threadPheroms = new Thread(new Runnable() {
             public void run(){
-                while (!pauseColorsAndPheromsAndAntUpdate){
+                while (true){
+                        while (pauseColorsAndPheromsAndAntUpdate){
+                            AntThread.pause(100);
+                        }
                         //attendre le temps de : delayPheroms avant chaque evaporation
                         try {
                             Thread.sleep(delayPheroms);
@@ -193,7 +198,6 @@ public class Plateau {
     }
 
     public void simulation(){
-        Fourmi fourmiCourante;
         this.threads = new AntThread[nombreFourmis];
     
         for (int i=0; i<nombreFourmis; i++)
@@ -203,12 +207,12 @@ public class Plateau {
             Fourmi fourmi = new Fourmi();
             listeFourmis.add( fourmi );
         }
-        threadsColorAndPheroms = new Thread[2];
+        threadsColorAndPheroms = new Thread[2];       
         //thread des pheromones
         threadsColorAndPheroms[0] = initupdatePheroms();
         //thread des couleurs
-        threadsColorAndPheroms[1] = updateColors();
-
+        threadsColorAndPheroms[1] = updateColors(); 
+        Fourmi fourmiCourante;
         //demarer les threads avec une fourmi
         for (int i=0;i<nombreFourmis;i++){
             fourmiCourante = listeFourmis.get(i); 
@@ -216,7 +220,6 @@ public class Plateau {
             threads[i].start();     
         }
 
-        
         threadsColorAndPheroms[0].start();
         threadsColorAndPheroms[1].start();
 
@@ -230,7 +233,6 @@ public class Plateau {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
     }
     
     public void showBestRoute(){
@@ -246,8 +248,6 @@ public class Plateau {
 
     public void restartAllThreads(){
         this.pauseColorsAndPheromsAndAntUpdate = false;
-        threadsColorAndPheroms[0].start();
-        threadsColorAndPheroms[1].start();
     }
 
 
@@ -255,7 +255,6 @@ public class Plateau {
 
         private Fourmi fourmiCourante;
         private Thread thread;
-        private boolean isPause;
         private boolean isAlive = true;
         
         public AntThread(){}
@@ -267,7 +266,10 @@ public class Plateau {
         @Override
         public synchronized void run() {
             var foundFoud = false;
-            while (isAlive && !pauseColorsAndPheromsAndAntUpdate){
+            while (isAlive){
+                while (pauseColorsAndPheromsAndAntUpdate){
+                    pause(100);
+                }
                 if (!foundFoud){ 
                     pause(delayAnt);
                     foundFoud = moveAnt(fourmiCourante);
@@ -305,28 +307,12 @@ public class Plateau {
             }
         }
 
-        public void pause(int delay){
+        public static void pause(int delay){
             try {
                 Thread.sleep(delay);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        }
-
-        //pour mettre le thread en pause
-        public synchronized void pause(){
-            while(isPause){
-                try{
-                    wait();
-                }catch(InterruptedException ie){
-                    ie.printStackTrace();
-                }
-            }
-            notify();
-        }
-
-        public void setIsPause(boolean isPause){
-            this.isPause = isPause;
         }
         
     }
