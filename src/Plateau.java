@@ -40,7 +40,7 @@ public class Plateau {
     public Thread updateColors(){    
         Thread thread = new Thread(new Runnable(){
             public void run(){
-                while (true){
+                while (listeFourmis.size() > 1){
                     while (pauseColorsAndPheromsAndAntUpdate){
                         AntThread.pause(100);
                     }
@@ -116,7 +116,7 @@ public class Plateau {
     private Thread initupdatePheroms(){
         Thread threadPheroms = new Thread(new Runnable() {
             public void run(){
-                while (true){
+                while (listeFourmis.size() > 1){
                         while (pauseColorsAndPheromsAndAntUpdate){
                             AntThread.pause(100);
                         }
