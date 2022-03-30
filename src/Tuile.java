@@ -1,4 +1,3 @@
-
 package src;
 
 import java.awt.Color;
@@ -124,10 +123,6 @@ public class Tuile{
         if (this.pherom + pherom  < pheromMax){
             this.pherom += pherom;
         }else this.pherom = pheromMax;
-    }
-
-    public void setPhermoToMin(){
-        pherom = pheromMin;
     }
 
     public void setPhermoToMin(){
