@@ -1,28 +1,39 @@
+package src;
 
+import java.awt.Color;
 import java.util.ArrayList;
 
 public class Tuile{
 
-    private static int distancemax = 500;
+    public static double pheromMin = 0.10;
+    public static double pheromMax = 0.80;
     private double pherom;//initial value to 1
     static int IDEN=0;
     int id;
     ArrayList<Fourmi> Fourmis = new ArrayList<>();
     boolean isColony = false;
     private boolean isFood = false;
-    private boolean isObstacle = false;
+    boolean isObstacle = false;
     ArrayList<Tuile> tuiles = new ArrayList<>();
-    boolean dejaVisite = false;
     private int cost = 1;//le cout de la tuile
-    private boolean hasAnt = false;
+    boolean hasAnt = false;
     private String idAnt = "";
     private int i,j;
     private Vue vue;
     
+    public void initColor(){
+        vue.mesTuiles[i][j].setBackground(Color.white);
+    }
+
+
+    public void setBackground(Color couleur){
+        vue.mesTuiles[i][j].setBackground(couleur);
+    }
+
     public Tuile(int i, int j, Vue vue){
         id=IDEN;
         IDEN++;
-        pherom = (double) 1 / distancemax;
+        pherom = pheromMin;
         this.setI(i); this.setJ(j);
         this.vue = vue;
     }
@@ -72,7 +83,11 @@ public class Tuile{
         return pherom;
     }
 
-    public void setPherom(float pherom){
+    public boolean isColony(){
+        return isColony;
+    }
+
+    public void setPherom(double pherom){
         this.pherom = pherom;
     }
 
@@ -88,14 +103,6 @@ public class Tuile{
         this.isFood = isFood;
     }
 
-    public boolean getObstacle(){
-        return this.isObstacle;
-    }
-
-    public void setObstacle(boolean b){
-        this.isObstacle = b;
-    }
-
     public String toString(){
         if(isColony) return"|C|";
         if(isFood) return "|F|";
@@ -103,23 +110,23 @@ public class Tuile{
         return"| |";
     }
 
+    public void setIsObstacle(boolean isObstacle){
+        this.isObstacle = isObstacle;
+    }
+
     public void vaporate(double taux){
-        if(this.pherom > 1/distancemax) {
-            this.pherom = (double) this.pherom * (1 - taux);
-            vue.mesTuiles[i][j].setBackground(vue.mesTuiles[i][j].getBackground().brighter());
-            vue.revalidate();
-            vue.repaint();
-        }
+        this.pherom = (double) this.pherom * (1 - taux);
+        if(this.pherom < pheromMin) this.pherom = pheromMin;
     }
 
     public void addPherom(double pherom){
-        this.pherom += pherom;
-        vue.mesTuiles[i][j].setBackground(vue.mesTuiles[i][j].getBackground().darker());
-        vue.revalidate();
-        vue.repaint();
+        if (this.pherom + pherom  < pheromMax){
+            this.pherom += pherom;
+        }else this.pherom = pheromMax;
     }
 
-    public boolean thereAreAnts(){
-        return (Fourmis.size()>0);
+    public void setPhermoToMin(){
+        pherom = pheromMin;
     }
+
 }
