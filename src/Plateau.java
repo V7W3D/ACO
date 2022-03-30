@@ -42,7 +42,7 @@ public class Plateau {
             public void run(){
                 while (listeFourmis.size() > 1){
                     while (pauseColorsAndPheromsAndAntUpdate){
-                        AntThread.pause(100);
+                        pause(100);
                     }
                     for (int i=0;i<height ;i++){
                         for (int j=0;j<width ;j++){
@@ -118,7 +118,7 @@ public class Plateau {
             public void run(){
                 while (listeFourmis.size() > 1){
                         while (pauseColorsAndPheromsAndAntUpdate){
-                            AntThread.pause(100);
+                            pause(100);
                         }
                         //attendre le temps de : delayPheroms avant chaque evaporation
                         try {
@@ -243,11 +243,19 @@ public class Plateau {
     }
 
     public void pauseAllThreads(){
-        this.pauseColorsAndPheromsAndAntUpdate = true;
+        this.pauseColorsAndPheromsAndAntUpdate = !this.pauseColorsAndPheromsAndAntUpdate;
     }
 
     public void restartAllThreads(){
         this.pauseColorsAndPheromsAndAntUpdate = false;
+    }
+
+    public void pause(int delay){
+        try {
+            Thread.sleep(delay);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -302,14 +310,6 @@ public class Plateau {
         public void join(){
             try {
                 thread.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-
-        public static void pause(int delay){
-            try {
-                Thread.sleep(delay);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
