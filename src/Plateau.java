@@ -17,37 +17,44 @@ public class Plateau {
     private static int delayAnt = 100;
     private int height,width;
     private static int alpha = 5,beta = 1;
-    private static double tauxDeVaporation = 0.05;//5%
+    private double tauxDeVaporation = 0.05;//5%
     private int[] tuileDeDepart = new int[2];
     private int nombreFourmis = 10;
     private ArrayList<Fourmi> listeFourmis = new ArrayList<Fourmi>();
-    private Tuile[][] plateau = new Tuile[30][30];
+    private Tuile[][] plateau;
     private AntThread threads[];
     private Thread[] threadsColorAndPheroms;
     private Vue vue;
     private volatile Fourmi fourmiPlusRapide;
-    private boolean pauseColorsAndPheromsUpdate = false;
+    private volatile boolean pauseColorsAndPheromsAndAntUpdate = false;
     
     public Tuile[][] getTuiles(){
         return this.plateau;
     }
 
-    public Thread updateColors(){
+    public void setVaporateRate(double rate){
+        assert(rate < 1 && rate > 0);
+        this.tauxDeVaporation = rate;
+    }
+
+    public Thread updateColors(){    
         Thread thread = new Thread(new Runnable(){
             public void run(){
-                while (!pauseColorsAndPheromsUpdate){
-                    
+                while (listeFourmis.size() > 1){
+                    while (pauseColorsAndPheromsAndAntUpdate){
+                        AntThread.pause(100);
+                    }
                     for (int i=0;i<height ;i++){
                         for (int j=0;j<width ;j++){
                             if (!plateau[i][j].isObstacle && !plateau[i][j].isColony() && !plateau[i][j].isFood()){
                                 //plus il y'a de pheromones plus la couleur est rouge
-                                if (plateau[i][j].hasAnt) vue.printText(i,j,"A");
-                                else vue.printText(i,j,"");
+                                if (plateau[i][j].hasAnt) vue.printAnt(i,j);
+                                else vue.removeAnt(i,j);
                                 double pherom = plateau[i][j].getPherom();
                                 if (pherom == Tuile.pheromMin) pherom = 0;
                                 else if (pherom == Tuile.pheromMax) pherom = 1;
                                 double qtt = 1 - pherom;
-                                int color =(int)(255 * qtt);
+                                int color = (int)(255 * qtt);
                                 vue.mesTuiles[i][j].setBackground( new Color(255, color, color) );
                             }
                         }
@@ -61,8 +68,9 @@ public class Plateau {
     public Plateau(int height, int width,Vue vue){
         this.height = height;
         this.width = width;
+        plateau = new Tuile[height][width];
         this.vue = vue;
-        this.maxDistanceAnt = height * width * 100;
+        this.maxDistanceAnt = height * width * 10;
         this.fourmiPlusRapide = new Fourmi();
         for(int i = 0;i<height;i++){
             for(int j = 0;j<width;j++){
@@ -100,17 +108,18 @@ public class Plateau {
         }
         tuileDeDepart[0] = 3;
         tuileDeDepart[1] = 0;
-        vue.mesTuiles[3][0].setBackground( Color.cyan );
         plateau[3][0].setColony(true);
         plateau[9][9].setFood(true);
-        vue.mesTuiles[9][9].setBackground( Color.green );
     }
 
     //vaporisation des pheromones
     private Thread initupdatePheroms(){
         Thread threadPheroms = new Thread(new Runnable() {
             public void run(){
-                while (!pauseColorsAndPheromsUpdate){
+                while (listeFourmis.size() > 1){
+                        while (pauseColorsAndPheromsAndAntUpdate){
+                            AntThread.pause(100);
+                        }
                         //attendre le temps de : delayPheroms avant chaque evaporation
                         try {
                             Thread.sleep(delayPheroms);
@@ -171,7 +180,6 @@ public class Plateau {
         }
         Tuile prochaineTuile = choixTuile(probs, tuile);
         fourmi.parcours.add(prochaineTuile);
-        //prochaineTuile.addPherom( Fourmi.quantityPherom );
         prochaineTuile.hasAnt = true;
         boolean remove = false;
         ArrayList<Tuile> tmp = new ArrayList<Tuile>(fourmi.parcours);
@@ -190,7 +198,6 @@ public class Plateau {
     }
 
     public void simulation(){
-        Fourmi fourmiCourante;
         this.threads = new AntThread[nombreFourmis];
     
         for (int i=0; i<nombreFourmis; i++)
@@ -200,12 +207,12 @@ public class Plateau {
             Fourmi fourmi = new Fourmi();
             listeFourmis.add( fourmi );
         }
-        threadsColorAndPheroms = new Thread[2];
+        threadsColorAndPheroms = new Thread[2];       
         //thread des pheromones
         threadsColorAndPheroms[0] = initupdatePheroms();
         //thread des couleurs
-        threadsColorAndPheroms[1] = updateColors();
-
+        threadsColorAndPheroms[1] = updateColors(); 
+        Fourmi fourmiCourante;
         //demarer les threads avec une fourmi
         for (int i=0;i<nombreFourmis;i++){
             fourmiCourante = listeFourmis.get(i); 
@@ -213,7 +220,6 @@ public class Plateau {
             threads[i].start();     
         }
 
-        
         threadsColorAndPheroms[0].start();
         threadsColorAndPheroms[1].start();
 
@@ -227,7 +233,6 @@ public class Plateau {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
     }
     
     public void showBestRoute(){
@@ -237,35 +242,12 @@ public class Plateau {
         }
     }
 
-    public void affiche(){
-        for(int i = 0;i<height;i++){
-            System.out.println();
-            for(int j = 0;j<width;j++){
-                System.out.print(plateau[i][j].getPherom()*100+" | ");
-            }
-        }
-    }
-
     public void pauseAllThreads(){
-        for (AntThread ant:threads){
-            if (ant.isAlive){
-                //set the pause variable to true
-                ant.setIsPause(true);
-                //pause the thread
-                ant.pause();
-                //pause the update colors and threads
-                this.pauseColorsAndPheromsUpdate = true;
-            }
-        }
+        this.pauseColorsAndPheromsAndAntUpdate = true;
     }
 
     public void restartAllThreads(){
-        for (AntThread ant:threads)
-            if (ant.isAlive) ant.setIsPause(false);
-        
-        this.pauseColorsAndPheromsUpdate = false;
-        threadsColorAndPheroms[0].start();
-        threadsColorAndPheroms[1].start();
+        this.pauseColorsAndPheromsAndAntUpdate = false;
     }
 
 
@@ -273,7 +255,6 @@ public class Plateau {
 
         private Fourmi fourmiCourante;
         private Thread thread;
-        private boolean isPause;
         private boolean isAlive = true;
         
         public AntThread(){}
@@ -286,6 +267,9 @@ public class Plateau {
         public synchronized void run() {
             var foundFoud = false;
             while (isAlive){
+                while (pauseColorsAndPheromsAndAntUpdate){
+                    pause(100);
+                }
                 if (!foundFoud){ 
                     pause(delayAnt);
                     foundFoud = moveAnt(fourmiCourante);
@@ -323,28 +307,12 @@ public class Plateau {
             }
         }
 
-        public void pause(int delay){
+        public static void pause(int delay){
             try {
                 Thread.sleep(delay);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        }
-
-        //pour mettre le thread en pause
-        public synchronized void pause(){
-            while(isPause){
-                try{
-                    wait();
-                }catch(InterruptedException ie){
-                    ie.printStackTrace();
-                }
-            }
-            notify();
-        }
-
-        public void setIsPause(boolean isPause){
-            this.isPause = isPause;
         }
         
     }

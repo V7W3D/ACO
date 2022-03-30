@@ -1,17 +1,24 @@
 package src;
 
 import javax.swing.*;
+import javax.swing.ImageIcon;
 import java.awt.*;
 import java.awt.event.*;
+import javax.swing.JMenuBar;
+
 
 public class Vue extends JFrame{
     private static final int hauteur = 600;
     private static final int largeur = 600;
-    private static final int n = 10;
-    private static final int m = 10;
+    private int n;
+    private int m;
     private Plateau plateau;
-    private JLabel[][] textToPrint = new JLabel[n][m];
-    JPanel[][] mesTuiles = new JPanel[n][m];
+    private JLabel[][] textToPrint;
+    JPanel[][] mesTuiles;
+    private String ressourcePath;
+    private ImageIcon iconeAntResized;
+    private JMenuBar menuBar;
+
 
     public void initColor(){
         for(int i = 0; i < n; i++) {
@@ -21,17 +28,28 @@ public class Vue extends JFrame{
         }
     }
 
-    public Vue() {
+    private ImageIcon resizedIcone(String path, int newsize){
+        ImageIcon imageIcon = new ImageIcon(path); // load the image to a imageIcon
+        Image image = imageIcon.getImage(); // transform it 
+        Image newimg = image.getScaledInstance(newsize, newsize,  java.awt.Image.SCALE_SMOOTH);
+        return new ImageIcon(newimg);
+    }
+
+    public Vue(int n, int m) {
+        this.n = n;
+        this.m = m;
+        this.ressourcePath = System.getProperty("user.dir") + "\\src\\ressources";
+        iconeAntResized = resizedIcone(this.ressourcePath + "\\ant.png", 30);
         setSize(hauteur, largeur);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("Simulation Algo des colonies de Fourmis");
-
+        textToPrint = new JLabel[n][m];
+        mesTuiles = new JPanel[n][m];
         JPanel container = new JPanel();
         container.setLayout(new GridLayout(n,m));
-
         for(int i = 0; i < n; i++) {
             for(int j = 0; j < m; j++) {
-                textToPrint[i][j] = new JLabel("");
+                textToPrint[i][j] = new JLabel();
                 mesTuiles[i][j] = new JPanel();
                 mesTuiles[i][j].add( textToPrint[i][j] );
                 mesTuiles[i][j].setBackground(new Color(255,255,255));
@@ -42,9 +60,38 @@ public class Vue extends JFrame{
         setContentPane(container);
     }
 
+    private JMenuBar initMenuBar(){
+        JMenuBar menu = new JMenuBar();
+        JMenu menuOPtions = new JMenu("Options");
+        JMenuItem pause = new JMenuItem("Pause");
+        JMenuItem restart = new JMenuItem("Restart");
+        menuOPtions.add(pause);
+        menuOPtions.add(restart);
+        pause.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                plateau.pauseAllThreads(); 
+            }
+        });
+        restart.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                plateau.restartAllThreads(); 
+            }
+        });
+        menu.add(menuOPtions);
+        return menu;
+    }
+
     public void init(){
+        menuBar = initMenuBar();
+        setJMenuBar(menuBar);
         for (int i=0;i<n;i++){
             for (int j=0;j<m;j++){
+                if (plateau.getTuiles()[i][j].isFood())
+                    textToPrint[i][j].setIcon( resizedIcone(this.ressourcePath+"\\food.png", 40) );
+                if (plateau.getTuiles()[i][j].isColony)
+                    textToPrint[i][j].setIcon( resizedIcone(this.ressourcePath+"\\home.png", 40) );
                 int i1 = i,j1 = j;
                 mesTuiles[i][j].addMouseListener(new MouseAdapter() {
                     @Override
@@ -66,7 +113,12 @@ public class Vue extends JFrame{
         this.plateau = plateau;
     }
 
-    public void printText(int i,int j,String text){
-        textToPrint[i][j].setText(text);
+    public void printAnt(int i,int j){
+        textToPrint[i][j].setIcon(iconeAntResized);
     }
+
+    public void removeAnt(int i,int j){
+        textToPrint[i][j].setIcon(null);
+    }
+
 }
