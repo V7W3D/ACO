@@ -26,9 +26,6 @@ public class Tuile{
         vue.mesTuiles[i][j].setBackground(Color.white);
     }
 
-    public void showPheroms(){
-        vue.printText(i, j, String.valueOf( this.pherom * 100 ).substring(0,3));
-    }
 
     public void setBackground(Color couleur){
         vue.mesTuiles[i][j].setBackground(couleur);
@@ -121,14 +118,16 @@ public class Tuile{
     public void vaporate(double taux){
         this.pherom = (double) this.pherom * (1 - taux);
         if(this.pherom < pheromMin) this.pherom = pheromMin;
-        showPheroms();
     }
 
     public void addPherom(double pherom){
         if (this.pherom + pherom  < pheromMax){
             this.pherom += pherom;
         }else this.pherom = pheromMax;
-        showPheroms();
+    }
+
+    public void setPhermoToMin(){
+        pherom = pheromMin;
     }
 
     public void setPhermoToMin(){

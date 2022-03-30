@@ -1,19 +1,16 @@
 package src;
 
 public class Main {
+
+    public static int height = 10, width = 10;
+
     public static void main(String[] args){
-        //Plateau p = new Plateau(10, 5);
-        //p.simulation();
-        //SwingUtilities.invokeLater(new Runnable() {
-            //@Override
-            //public void run() {
-                Vue vue = new Vue();
-                Plateau p = new Plateau(10,10,vue);
-                vue.setPlateau(p);
-                vue.init();
-                vue.setVisible(true);
-                p.simulation();
-           // }
-        //});
+        Vue vue = new Vue(height, width);
+        Plateau p = new Plateau(height, width, vue);
+        vue.setPlateau(p);
+        vue.init();
+        vue.setVisible(true);
+        //lance la simulation
+        p.simulation();
     }
 }
