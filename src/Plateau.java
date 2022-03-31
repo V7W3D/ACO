@@ -273,7 +273,7 @@ public class Plateau {
             
         @Override
         public synchronized void run() {
-            var foundFoud = false;
+            boolean foundFoud = false;
             while (isAlive){
                 while (pauseColorsAndPheromsAndAntUpdate){
                     pause(100);
