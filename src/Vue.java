@@ -18,6 +18,8 @@ public class Vue extends JFrame{
     private String ressourcePath;
     private ImageIcon iconeAntResized;
     private JMenuBar menuBar;
+    private boolean ColonieChoisie = false;;
+    private boolean FoodChoisie = false, lancer = false;
 
 
     public void initColor(){
@@ -38,9 +40,9 @@ public class Vue extends JFrame{
     public Vue(int n, int m) {
         this.n = n;
         this.m = m;
-        this.ressourcePath = System.getProperty("user.dir") + "/src/ressources";
+        this.ressourcePath = System.getProperty("user.dir") + "\\src\\ressources";
+        iconeAntResized = resizedIcone(this.ressourcePath + "\\ant.png", 30);
         System.out.println(ressourcePath);
-        iconeAntResized = resizedIcone(this.ressourcePath + "/ant.png", 30);
         setSize(hauteur, largeur);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("Simulation Algo des colonies de Fourmis");
@@ -66,8 +68,19 @@ public class Vue extends JFrame{
         JMenu menuOPtions = new JMenu("Options");
         JMenuItem pause = new JMenuItem("Pause");
         JMenuItem restart = new JMenuItem("Restart");
+        JMenuItem LancerSim = new JMenuItem("Lancer");
+        LancerSim.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (!lancer) {
+                    plateau.simulation();
+                    lancer = true;
+                }
+            }
+        });
         menuOPtions.add(pause);
         menuOPtions.add(restart);
+        menu.add(LancerSim);
         pause.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -81,6 +94,8 @@ public class Vue extends JFrame{
             }
         });
         menu.add(menuOPtions);
+        menuOPtions.addSeparator();
+        menu.add(LancerSim);
         return menu;
     }
 
@@ -89,16 +104,21 @@ public class Vue extends JFrame{
         setJMenuBar(menuBar);
         for (int i=0;i<n;i++){
             for (int j=0;j<m;j++){
-                if (plateau.getTuiles()[i][j].isFood())
-                    textToPrint[i][j].setIcon( resizedIcone(this.ressourcePath+"/food.png", 40) );
-                if (plateau.getTuiles()[i][j].isColony)
-                    textToPrint[i][j].setIcon( resizedIcone(this.ressourcePath+"/home.png", 40) );
                 int i1 = i,j1 = j;
                 mesTuiles[i][j].addMouseListener(new MouseAdapter() {
                     @Override
                     public void mousePressed(MouseEvent e) {
-                        if(SwingUtilities.isRightMouseButton(e)){
-                            new Pop(plateau.getTuiles()[i1][j1]);
+                        if(!ColonieChoisie){
+                            plateau.initDepart(i1, j1);
+                            ColonieChoisie = true;
+                            textToPrint[i1][j1].setIcon( resizedIcone(ressourcePath+"\\home.png", 40) );
+                            plateau.getTuiles()[i1][j1].setColony(true);
+                        }
+
+                        else if(!FoodChoisie){
+                            plateau.initFood(i1, j1);
+                            FoodChoisie = true;
+                            textToPrint[i1][j1].setIcon( resizedIcone(ressourcePath+"\\food.png", 40) );
                         }
                         else{
                         if (plateau.getTuiles()[i1][j1].isObstacle){
@@ -108,8 +128,7 @@ public class Vue extends JFrame{
                             plateau.getTuiles()[i1][j1].setIsObstacle(true);
                             mesTuiles[i1][j1].setBackground( Color.black );
                         }
-                    }
-                    }
+                    }}
                 });
             }
         }

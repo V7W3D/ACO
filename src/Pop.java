@@ -18,8 +18,8 @@ class Pop extends JFrame {
  
         p2.add(l);
         p = pf.getPopup(f, p2, 180, 100);
-        JLabel jlabel = new JLabel("<html>"+a.toString()+"</html>");
-        jlabel.setFont(new Font("Verdana",1,15));
+        JLabel jlabel = new JLabel(""+a.toString());
+        jlabel.setFont(new Font("Verdana",1,20));
         JPanel p1 = new JPanel();
         f.add(p1);
         f.add(jlabel);

@@ -28,7 +28,6 @@ public Fenetre(){
         vue.setPlateau(p);
         vue.init();
         vue.setVisible(true);
-        p.simulation();
     }
 }
 public static void main(String[] args) {

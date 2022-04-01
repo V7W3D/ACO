@@ -104,9 +104,10 @@ public class Tuile{
     }
 
     public String toString(){
-        if(isColony) return"this is the clolony";
-        else if(isFood) return "this is the food";
-        else return "this is tile("+i+","+j+") "+"\n" +" with a pherom level of "+pherom;
+        if(isColony) return"|C|";
+        if(isFood) return "|F|";
+        if (hasAnt) return "|"+idAnt+"|";
+        return"| |";
     }
 
     public void setIsObstacle(boolean isObstacle){

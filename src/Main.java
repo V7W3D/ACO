@@ -11,6 +11,6 @@ public class Main {
         vue.init();
         vue.setVisible(true);
         //lance la simulation
-        p.simulation();
+        //p.simulation();
     }
 }
