@@ -38,8 +38,9 @@ public class Vue extends JFrame{
     public Vue(int n, int m) {
         this.n = n;
         this.m = m;
-        this.ressourcePath = System.getProperty("user.dir") + "\\src\\ressources";
-        iconeAntResized = resizedIcone(this.ressourcePath + "\\ant.png", 30);
+        this.ressourcePath = System.getProperty("user.dir") + "/src/ressources";
+        System.out.println(ressourcePath);
+        iconeAntResized = resizedIcone(this.ressourcePath + "/ant.png", 30);
         setSize(hauteur, largeur);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("Simulation Algo des colonies de Fourmis");
@@ -89,9 +90,9 @@ public class Vue extends JFrame{
         for (int i=0;i<n;i++){
             for (int j=0;j<m;j++){
                 if (plateau.getTuiles()[i][j].isFood())
-                    textToPrint[i][j].setIcon( resizedIcone(this.ressourcePath+"\\food.png", 40) );
+                    textToPrint[i][j].setIcon( resizedIcone(this.ressourcePath+"/food.png", 40) );
                 if (plateau.getTuiles()[i][j].isColony)
-                    textToPrint[i][j].setIcon( resizedIcone(this.ressourcePath+"\\home.png", 40) );
+                    textToPrint[i][j].setIcon( resizedIcone(this.ressourcePath+"/home.png", 40) );
                 int i1 = i,j1 = j;
                 mesTuiles[i][j].addMouseListener(new MouseAdapter() {
                     @Override
