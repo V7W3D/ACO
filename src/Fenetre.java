@@ -35,6 +35,7 @@ public Fenetre(){
             vue.setVisible(true);
         }else{
             JOptionPane.showMessageDialog(null, "Entrez des valeurs corrects","ERREUR",JOptionPane.ERROR_MESSAGE);
+            new Fenetre();
         }
     }
 }
@@ -86,8 +87,4 @@ public Fenetre(){
     public boolean allFieldsCorrect(String s1,String s2,String s3,String s4,String s5){
         return alphaCorrect(s1) && betaCorrect(s2) && taillePlateauCorrect(s3) && taillePlateauCorrect(s4) && nbFourmisCorrect(s5);
     }
-public static void main(String[] args) {
-    new Fenetre();
-   
-}
 }
