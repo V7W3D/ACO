@@ -32,6 +32,18 @@ public class Plateau {
         return this.plateau;
     }
 
+    public void setALpha(int a){
+        alpha = a;
+    }
+
+    public void setBeta(int b){
+        beta = b;
+    }
+
+    public void setNbFourmis(int nb){
+        nombreFourmis = nb;
+    }
+
     public void setVaporateRate(double rate){
         assert(rate < 1 && rate > 0);
         this.tauxDeVaporation = rate;
