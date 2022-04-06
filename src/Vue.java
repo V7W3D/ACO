@@ -40,8 +40,8 @@ public class Vue extends JFrame{
     public Vue(int n, int m) {
         this.n = n;
         this.m = m;
-        this.ressourcePath = System.getProperty("user.dir") + "\\src\\ressources";
-        iconeAntResized = resizedIcone(this.ressourcePath + "\\ant.png", 30);
+        this.ressourcePath = System.getProperty("user.dir") + "/src/ressources";
+        iconeAntResized = resizedIcone(this.ressourcePath + "/ant.png", 30);
         System.out.println(ressourcePath);
         setSize(hauteur, largeur);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -111,25 +111,29 @@ public class Vue extends JFrame{
                         if(!ColonieChoisie){
                             plateau.initDepart(i1, j1);
                             ColonieChoisie = true;
-                            textToPrint[i1][j1].setIcon( resizedIcone(ressourcePath+"\\home.png", 40) );
+                            textToPrint[i1][j1].setIcon( resizedIcone(ressourcePath+"/home.png", 40) );
                             plateau.getTuiles()[i1][j1].setColony(true);
                         }
 
                         else if(!FoodChoisie){
                             plateau.initFood(i1, j1);
                             FoodChoisie = true;
-                            textToPrint[i1][j1].setIcon( resizedIcone(ressourcePath+"\\food.png", 40) );
+                            textToPrint[i1][j1].setIcon( resizedIcone(ressourcePath+"/food.png", 40) );
                         }
                         else{
-                        if (plateau.getTuiles()[i1][j1].isObstacle){
-                            plateau.getTuiles()[i1][j1].setIsObstacle(false);
-                            mesTuiles[i1][j1].setBackground( Color.white );
-                        }else{
-                            plateau.getTuiles()[i1][j1].setIsObstacle(true);
-                            mesTuiles[i1][j1].setBackground( Color.black );
-                        }
-                    }}
-                });
+                            if(SwingUtilities.isRightMouseButton(e)){
+                                new Pop(plateau.getTuiles()[i1][j1]);
+                            }
+                            else{
+                            if (plateau.getTuiles()[i1][j1].isObstacle){
+                                plateau.getTuiles()[i1][j1].setIsObstacle(false);
+                                mesTuiles[i1][j1].setBackground( Color.white );
+                            }else{
+                                plateau.getTuiles()[i1][j1].setIsObstacle(true);
+                                mesTuiles[i1][j1].setBackground( Color.black );
+    
+                    }}}}}
+                );
             }
         }
     }
