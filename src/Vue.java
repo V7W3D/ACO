@@ -88,8 +88,9 @@ public class Vue extends JFrame{
         });
         restart.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                plateau.restartAllThreads(); 
+            public void actionPerformed(ActionEvent e) { 
+                dispose();
+                new Fenetre();
             }
         });
         menu.add(menuOPtions);
