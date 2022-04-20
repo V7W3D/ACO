@@ -28,6 +28,10 @@ public class Plateau {
     private volatile Fourmi fourmiPlusRapide;
     private volatile boolean pauseColorsAndPheromsAndAntUpdate = false;
 
+    public int getNbFourmi(){
+        return nombreFourmis;
+    }
+
     public void setParmsToDefault(){
         alpha = 5;
         beta = 1;

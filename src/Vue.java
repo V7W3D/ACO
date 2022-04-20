@@ -66,15 +66,16 @@ public class Vue extends JFrame {
     private JMenuBar initMenuBar() {
         JMenuBar menu = new JMenuBar();
         JMenu menuOPtions = new JMenu("Options");
-        JMenu modifications = new JMenu("Modifications");
+        JMenu modifications = new JMenu("Parametres");
         JMenuItem modifierParametres = new JMenuItem("Modifications des parametres");
-        JMenuItem afficherParametres = new JMenuItem("Afficher des parametres");
+        JMenuItem afficherParametres = new JMenuItem("Afficher les parametres");
         JMenuItem pause = new JMenuItem("Pause");
         JMenuItem restart = new JMenuItem("Restart");
         JMenu LancerSim = new JMenu("Lancer");
         JMenuItem lancerLaSimulation = new JMenuItem("Lancer Simulation");
         LancerSim.add(lancerLaSimulation);
         modifications.add(modifierParametres);
+        modifications.add(afficherParametres);
         lancerLaSimulation.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -92,6 +93,17 @@ public class Vue extends JFrame {
                 modMenu.setVisible(true);
                 modMenu.setLocationRelativeTo(null);
             }
+        });
+        afficherParametres.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                plateau.pauseAllThreads();
+                ModificationsMenu modMenu = new ModificationsMenu(true);
+                modMenu.setVisible(true);
+                modMenu.setLocationRelativeTo(null);
+            }
+
         });
         menuOPtions.add(pause);
         menuOPtions.add(restart);
@@ -171,6 +183,29 @@ public class Vue extends JFrame {
         private JPanel mainContainer, containersLables, containerData;
         private JLabel field1, field2, field3, field4, field5;
 
+        public ModificationsMenu(boolean showInfo){
+            JMenuBar menu = new JMenuBar();
+            JMenu exit = new JMenu("exit");
+            this.setJMenuBar(menu);
+            menu.add(exit);
+            exit.addMouseListener(initMenuButtons(()->{
+                plateau.restartAllThreads();
+                dispose();
+            }));
+            setTitle("Parametres");
+            setSize(300,250);
+            mainContainer = new JPanel();
+            mainContainer.setLayout(new GridLayout(0,1));
+            mainContainer.add(new JLabel("  Alpha : "+plateau.getAlpha()));
+            mainContainer.add(new JLabel("  Beta : "+plateau.getBeta()));
+            mainContainer.add(new JLabel("  Taux de vaporation : "+(int)(plateau.getTauxDeVaporation() * 100)+ "%"));
+            mainContainer.add(new JLabel("  Temps d'evaporation : "+plateau.getDelayPheroms() + "ms"));
+            mainContainer.add(new JLabel("  Nombre de fourmis : "+plateau.getNbFourmi()));
+            mainContainer.add(new JLabel("  Vitesse fourmis : "+plateau.getDelayAnt() +"ms"));
+            setContentPane(mainContainer);
+            this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+        }
+
         private void initTextFields() {
             field1 = new JLabel("       alpha : 1");
             field2 = new JLabel("       beta : 2");
@@ -229,7 +264,7 @@ public class Vue extends JFrame {
                 dispose();
                 plateau.restartAllThreads();
             }));
-            JMenu cancel = new JMenu("Cancel");
+            JMenu cancel = new JMenu("exit");
             cancel.addMouseListener(initMenuButtons(() -> {
                 plateau.restartAllThreads();
                 dispose();
@@ -241,8 +276,8 @@ public class Vue extends JFrame {
             }));
             setJMenuBar(menu);
             menu.add(apply);
-            menu.add(cancel);
             menu.add(back);
+            menu.add(cancel);
             initTextFields();
             containerData = new JPanel();
             containerData.setLayout(new GridLayout(0, 1));
@@ -280,9 +315,9 @@ public class Vue extends JFrame {
             initSlidersListner();
             setContentPane(mainContainer);
             setSize(500, 550);
-            setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             setTitle("Modifications");
             setSlidersToDefaultValue();
+            this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         }
 
         private void initSlidersListner() {
