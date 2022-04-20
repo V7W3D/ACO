@@ -42,7 +42,6 @@ public class Vue extends JFrame {
         this.n = n;
         this.m = m;
         this.ressourcePath = System.getProperty("user.dir") + "\\src\\ressources";
-        iconeAntResized = resizedIcone(this.ressourcePath + "/ant.png", 30);
         setSize(hauteur, largeur);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("Simulation Algo des colonies de Fourmis");
@@ -138,14 +137,14 @@ public class Vue extends JFrame {
                         if (!ColonieChoisie) {
                             plateau.initDepart(i1, j1);
                             ColonieChoisie = true;
-                            textToPrint[i1][j1].setIcon(resizedIcone(ressourcePath + "/home.png", 40));
+                            textToPrint[i1][j1].setIcon(resizedIcone(ressourcePath + "/home.png", 350 / Math.max(plateau.getHeight(),plateau.getWidth() )));
                             plateau.getTuiles()[i1][j1].setColony(true);
                         }
 
                         else if (!FoodChoisie) {
                             plateau.initFood(i1, j1);
                             FoodChoisie = true;
-                            textToPrint[i1][j1].setIcon(resizedIcone(ressourcePath + "/food.png", 40));
+                            textToPrint[i1][j1].setIcon(resizedIcone(ressourcePath + "/food.png", 350 / Math.max(plateau.getHeight(),plateau.getWidth() )));
                         } else {
                             if (SwingUtilities.isRightMouseButton(e)) {
                                 new Pop(plateau.getTuiles()[i1][j1]);
@@ -168,6 +167,7 @@ public class Vue extends JFrame {
 
     public void setPlateau(Plateau plateau) {
         this.plateau = plateau;
+        iconeAntResized = resizedIcone(this.ressourcePath + "/ant.png", 350 / Math.max(plateau.getHeight(),plateau.getWidth()));
     }
 
     public void printAnt(int i, int j) {
@@ -290,7 +290,7 @@ public class Vue extends JFrame {
             JLabel textLabel5 = new JLabel("temps de deplacement fourmis : ");
             inputVap = initSliders(5, 100, 5, 10);
             inputDelayVap = initSliders(1000, 8000, 1000, 1000);
-            inputDelayAnt = initSliders(100, 1000, 100, 100);
+            inputDelayAnt = initSliders(10, 1010, 100, 100);
             mainContainer = new JPanel();
             alphaSlide = initSliders(1, 16, 1, 1);
             betaSlide = initSliders(1, 16, 1, 1);
