@@ -12,11 +12,11 @@ public class Plateau {
 
     private int maxDistanceAnt;
     //delai d'evaporation chaque 4s
-    private static int delayPheroms = 4000;
+    private int delayPheroms = 4000;
     //delai de deplacement de chaque fourmi chaque 100ms
-    private static int delayAnt = 100;
+    private int delayAnt = 100;
     private int height,width;
-    private static int alpha = 5,beta = 1;
+    private int alpha = 5,beta = 1;
     private double tauxDeVaporation = 0.05;//5%
     private int[] tuileDeDepart = new int[2];
     private int nombreFourmis = 10;
@@ -27,7 +27,49 @@ public class Plateau {
     private Vue vue;
     private volatile Fourmi fourmiPlusRapide;
     private volatile boolean pauseColorsAndPheromsAndAntUpdate = false;
+
+    public void setParmsToDefault(){
+        alpha = 5;
+        beta = 1;
+        tauxDeVaporation = 0.05;
+        delayAnt = 100;
+        delayPheroms = 4000;
+    }
     
+    public void setAlphaAndBeta(int alpha, int beta){
+        this.alpha = alpha;
+        this.beta = beta;
+    }
+
+    public int getAlpha(){
+        return alpha;
+    }
+
+    public int getBeta(){
+        return beta;
+    }
+
+    public double getTauxDeVaporation(){
+        return tauxDeVaporation;
+    }
+
+    public int getDelayAnt(){
+        return delayAnt;
+    }
+
+    public int getDelayPheroms(){
+        return delayPheroms;
+    }
+
+    public void setdelayAntandVap(int delayAnt, int delaVap){
+        this.delayAnt = delayAnt;
+        this.delayPheroms = delaVap;
+    }
+
+    public void setTauxDeVaporation(double taux){
+        this.tauxDeVaporation = taux;
+    }
+
     public Tuile[][] getTuiles(){
         return this.plateau;
     }
