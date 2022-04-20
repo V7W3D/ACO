@@ -63,6 +63,7 @@ public class Vue extends JFrame{
     private JMenuBar initMenuBar(){
         JMenuBar menu = new JMenuBar();
         JMenu menuOPtions = new JMenu("Options");
+        JMenu modifications = new JMenu("Modifications");
         JMenuItem pause = new JMenuItem("Pause");
         JMenuItem restart = new JMenuItem("Restart");
         menuOPtions.add(pause);
@@ -80,6 +81,7 @@ public class Vue extends JFrame{
             }
         });
         menu.add(menuOPtions);
+        menu.add(modifications);
         return menu;
     }
 
