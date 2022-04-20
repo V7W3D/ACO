@@ -32,6 +32,18 @@ public class Plateau {
         return this.plateau;
     }
 
+    public void setALpha(int a){
+        alpha = a;
+    }
+
+    public void setBeta(int b){
+        beta = b;
+    }
+
+    public void setNbFourmis(int nb){
+        nombreFourmis = nb;
+    }
+
     public void setVaporateRate(double rate){
         assert(rate < 1 && rate > 0);
         this.tauxDeVaporation = rate;
@@ -106,10 +118,6 @@ public class Plateau {
                 }
             }
         }
-        tuileDeDepart[0] = 3;
-        tuileDeDepart[1] = 0;
-        plateau[3][0].setColony(true);
-        plateau[9][9].setFood(true);
     }
 
     //vaporisation des pheromones
@@ -183,7 +191,6 @@ public class Plateau {
         prochaineTuile.hasAnt = true;
         boolean remove = false;
         ArrayList<Tuile> tmp = new ArrayList<Tuile>(fourmi.parcours);
-        //suppression des boucles inutiles pour optimiser l'algo
         if (fourmi.wentFromIt(prochaineTuile)){
             for (Tuile tuileP:fourmi.parcours){
                 if (tuileP.equals(prochaineTuile))
@@ -207,6 +214,7 @@ public class Plateau {
             Fourmi fourmi = new Fourmi();
             listeFourmis.add( fourmi );
         }
+        
         threadsColorAndPheroms = new Thread[2];       
         //thread des pheromones
         threadsColorAndPheroms[0] = initupdatePheroms();
@@ -219,20 +227,21 @@ public class Plateau {
             threads[i].setFourmiCourante(fourmiCourante);
             threads[i].start();     
         }
+        
 
         threadsColorAndPheroms[0].start();
         threadsColorAndPheroms[1].start();
 
-        //attendre que les threads terminent
+       /* //attendre que les threads terminent
         for (int i=0;i<nombreFourmis;i++)
             threads[i].join();
 
-        try {
-            threadsColorAndPheroms[0].join();
-            threadsColorAndPheroms[1].join();
+       try {
+           // threadsColorAndPheroms[0].join();
+           // threadsColorAndPheroms[1].join();
         } catch (InterruptedException e) {
             e.printStackTrace();
-        }
+        }*/
     }
     
     public void showBestRoute(){
@@ -315,5 +324,12 @@ public class Plateau {
             }
         }
         
+    }
+    public void initDepart(int i,int j){
+        tuileDeDepart[0]=i;
+        tuileDeDepart[1]=j;
+    }
+    public void initFood(int i,int j){
+        plateau[i][j].setFood(true);
     }
 }
