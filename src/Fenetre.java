@@ -33,6 +33,7 @@ public Fenetre(){
             vue.setPlateau(p);
             vue.init();
             vue.setVisible(true);
+            vue.setLocationRelativeTo(null);
         }else{
             JOptionPane.showMessageDialog(null, "Entrez des valeurs corrects","ERREUR",JOptionPane.ERROR_MESSAGE);
             new Fenetre();

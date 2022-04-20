@@ -12,11 +12,11 @@ public class Plateau {
 
     private int maxDistanceAnt;
     //delai d'evaporation chaque 4s
-    private static int delayPheroms = 4000;
+    private int delayPheroms = 4000;
     //delai de deplacement de chaque fourmi chaque 100ms
-    private static int delayAnt = 100;
+    private int delayAnt = 100;
     private int height,width;
-    private static int alpha = 5,beta = 1;
+    private int alpha = 5,beta = 1;
     private double tauxDeVaporation = 0.05;//5%
     private int[] tuileDeDepart = new int[2];
     private int nombreFourmis = 10;
@@ -27,7 +27,61 @@ public class Plateau {
     private Vue vue;
     private volatile Fourmi fourmiPlusRapide;
     private volatile boolean pauseColorsAndPheromsAndAntUpdate = false;
+
+    public int getHeight(){
+        return height;
+    }
+
+    public int getWidth(){
+        return width;
+    }
+
+    public int getNbFourmi(){
+        return nombreFourmis;
+    }
+
+    public void setParmsToDefault(){
+        alpha = 5;
+        beta = 1;
+        tauxDeVaporation = 0.05;
+        delayAnt = 100;
+        delayPheroms = 4000;
+    }
     
+    public void setAlphaAndBeta(int alpha, int beta){
+        this.alpha = alpha;
+        this.beta = beta;
+    }
+
+    public int getAlpha(){
+        return alpha;
+    }
+
+    public int getBeta(){
+        return beta;
+    }
+
+    public double getTauxDeVaporation(){
+        return tauxDeVaporation;
+    }
+
+    public int getDelayAnt(){
+        return delayAnt;
+    }
+
+    public int getDelayPheroms(){
+        return delayPheroms;
+    }
+
+    public void setdelayAntandVap(int delayAnt, int delaVap){
+        this.delayAnt = delayAnt;
+        this.delayPheroms = delaVap;
+    }
+
+    public void setTauxDeVaporation(double taux){
+        this.tauxDeVaporation = taux;
+    }
+
     public Tuile[][] getTuiles(){
         return this.plateau;
     }
@@ -43,6 +97,7 @@ public class Plateau {
     public void setNbFourmis(int nb){
         nombreFourmis = nb;
     }
+
 
     public void setVaporateRate(double rate){
         assert(rate < 1 && rate > 0);
@@ -214,7 +269,7 @@ public class Plateau {
             Fourmi fourmi = new Fourmi();
             listeFourmis.add( fourmi );
         }
-        
+
         threadsColorAndPheroms = new Thread[2];       
         //thread des pheromones
         threadsColorAndPheroms[0] = initupdatePheroms();
@@ -225,24 +280,16 @@ public class Plateau {
         for (int i=0;i<nombreFourmis;i++){
             fourmiCourante = listeFourmis.get(i); 
             threads[i].setFourmiCourante(fourmiCourante);
-            threads[i].start();     
+            threads[i].start();    
         }
         
 
         threadsColorAndPheroms[0].start();
         threadsColorAndPheroms[1].start();
 
-       /* //attendre que les threads terminent
-        for (int i=0;i<nombreFourmis;i++)
-            threads[i].join();
-
-       try {
-           // threadsColorAndPheroms[0].join();
-           // threadsColorAndPheroms[1].join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }*/
+    
     }
+    
     
     public void showBestRoute(){
         vue.initColor();
@@ -255,16 +302,16 @@ public class Plateau {
         this.pauseColorsAndPheromsAndAntUpdate = !this.pauseColorsAndPheromsAndAntUpdate;
     }
 
-    public void restartAllThreads(){
-        this.pauseColorsAndPheromsAndAntUpdate = false;
-    }
-
     public void pause(int delay){
         try {
             Thread.sleep(delay);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    public void restartAllThreads(){
+        this.pauseColorsAndPheromsAndAntUpdate = false;
     }
 
 
