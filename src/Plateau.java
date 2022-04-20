@@ -98,6 +98,7 @@ public class Plateau {
         nombreFourmis = nb;
     }
 
+
     public void setVaporateRate(double rate){
         assert(rate < 1 && rate > 0);
         this.tauxDeVaporation = rate;
@@ -268,7 +269,7 @@ public class Plateau {
             Fourmi fourmi = new Fourmi();
             listeFourmis.add( fourmi );
         }
-        
+
         threadsColorAndPheroms = new Thread[2];       
         //thread des pheromones
         threadsColorAndPheroms[0] = initupdatePheroms();
@@ -279,24 +280,16 @@ public class Plateau {
         for (int i=0;i<nombreFourmis;i++){
             fourmiCourante = listeFourmis.get(i); 
             threads[i].setFourmiCourante(fourmiCourante);
-            threads[i].start();     
+            threads[i].start();    
         }
         
 
         threadsColorAndPheroms[0].start();
         threadsColorAndPheroms[1].start();
 
-       /* //attendre que les threads terminent
-        for (int i=0;i<nombreFourmis;i++)
-            threads[i].join();
-
-       try {
-           // threadsColorAndPheroms[0].join();
-           // threadsColorAndPheroms[1].join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }*/
+    
     }
+    
     
     public void showBestRoute(){
         vue.initColor();
@@ -309,16 +302,16 @@ public class Plateau {
         this.pauseColorsAndPheromsAndAntUpdate = !this.pauseColorsAndPheromsAndAntUpdate;
     }
 
-    public void restartAllThreads(){
-        this.pauseColorsAndPheromsAndAntUpdate = false;
-    }
-
     public void pause(int delay){
         try {
             Thread.sleep(delay);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    public void restartAllThreads(){
+        this.pauseColorsAndPheromsAndAntUpdate = false;
     }
 
 
