@@ -18,6 +18,19 @@ public class Sauvegarde {
         this.v = v;
     }
 
+    public void sauvgarder() {
+        JFileChooser choose = new JFileChooser(
+            FileSystemView
+            .getFileSystemView()
+            .getHomeDirectory()
+        );
+        int res = choose.showSaveDialog(null);
+        if (res == JFileChooser.APPROVE_OPTION) {
+            File fileToSave = choose.getSelectedFile();
+            writeMatrice(fileToSave.getAbsolutePath(), v.mesTuiles);
+        }
+    }
+
     public void ouvrir(){
         JFileChooser choose = new JFileChooser(
             FileSystemView
