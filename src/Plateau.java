@@ -82,10 +82,6 @@ public class Plateau {
         this.tauxDeVaporation = taux;
     }
 
-    public Tuile[][] getTuiles(){
-        return this.plateau;
-    }
-
     public void setALpha(int a){
         alpha = a;
     }
@@ -135,13 +131,13 @@ public class Plateau {
     public Plateau(int height, int width,Vue vue){
         this.height = height;
         this.width = width;
-        plateau = new Tuile[height][width];
+        plateau = vue.mesTuiles;
         this.vue = vue;
         this.maxDistanceAnt = height * width * 10;
         this.fourmiPlusRapide = new Fourmi();
         for(int i = 0;i<height;i++){
             for(int j = 0;j<width;j++){
-                this.plateau[i][j]= new Tuile(i,j, this.vue);
+                this.plateau[i][j]= new Tuile(i,j);
             }
         }
         //Tuiles accessibles(la ca part dans toutes les directions)

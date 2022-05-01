@@ -15,17 +15,17 @@ public class Vue extends JFrame {
     private int m;
     private Plateau plateau;
     private JLabel[][] textToPrint;
-    JPanel[][] mesTuiles;
+    Tuile[][] mesTuiles;
     private String ressourcePath;
     private ImageIcon iconeAntResized;
     private JMenuBar menuBar;
-    private boolean ColonieChoisie = false;;
+    private boolean ColonieChoisie = false;
     private boolean FoodChoisie = false, lancer = false;
 
     public void initColor() {
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < m; j++) {
-                if (!plateau.getTuiles()[i][j].isObstacle)
+                if (!mesTuiles[i][j].isObstacle)
                     mesTuiles[i][j].setBackground(Color.WHITE);
             }
         }
@@ -46,13 +46,13 @@ public class Vue extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("Simulation Algo des colonies de Fourmis");
         textToPrint = new JLabel[n][m];
-        mesTuiles = new JPanel[n][m];
+        mesTuiles = new Tuile[n][m];
         JPanel container = new JPanel();
         container.setLayout(new GridLayout(n, m));
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < m; j++) {
                 textToPrint[i][j] = new JLabel();
-                mesTuiles[i][j] = new JPanel();
+                mesTuiles[i][j] = new Tuile(i,j);
                 mesTuiles[i][j].add(textToPrint[i][j]);
                 mesTuiles[i][j].setBackground(new Color(255, 255, 255));
                 mesTuiles[i][j].setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.LIGHT_GRAY));
@@ -138,7 +138,7 @@ public class Vue extends JFrame {
                             plateau.initDepart(i1, j1);
                             ColonieChoisie = true;
                             textToPrint[i1][j1].setIcon(resizedIcone(ressourcePath + "/home.png", 350 / Math.max(plateau.getHeight(),plateau.getWidth() )));
-                            plateau.getTuiles()[i1][j1].setColony(true);
+                            mesTuiles[i1][j1].setColony(true);
                         }
 
                         else if (!FoodChoisie) {
@@ -147,13 +147,13 @@ public class Vue extends JFrame {
                             textToPrint[i1][j1].setIcon(resizedIcone(ressourcePath + "/food.png", 350 / Math.max(plateau.getHeight(),plateau.getWidth() )));
                         } else {
                             if (SwingUtilities.isRightMouseButton(e)) {
-                                new Pop(plateau.getTuiles()[i1][j1]);
+                                new Pop(mesTuiles[i1][j1]);
                             } else {
-                                if (plateau.getTuiles()[i1][j1].isObstacle) {
-                                    plateau.getTuiles()[i1][j1].setIsObstacle(false);
+                                if (mesTuiles[i1][j1].isObstacle) {
+                                    mesTuiles[i1][j1].setIsObstacle(false);
                                     mesTuiles[i1][j1].setBackground(Color.white);
                                 } else {
-                                    plateau.getTuiles()[i1][j1].setIsObstacle(true);
+                                    mesTuiles[i1][j1].setIsObstacle(true);
                                     mesTuiles[i1][j1].setBackground(Color.black);
 
                                 }
