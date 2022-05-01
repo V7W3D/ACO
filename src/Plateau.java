@@ -118,7 +118,7 @@ public class Plateau {
                                 else if (pherom == Tuile.pheromMax) pherom = 1;
                                 double qtt = 1 - pherom;
                                 int color = (int)(255 * qtt);
-                                vue.mesTuiles[i][j].setBackground( new Color(255, color, color) );
+                                plateau[i][j].setBackground( new Color(255, color, color) );
                             }
                         }
                     }
@@ -135,11 +135,6 @@ public class Plateau {
         this.vue = vue;
         this.maxDistanceAnt = height * width * 10;
         this.fourmiPlusRapide = new Fourmi();
-        for(int i = 0;i<height;i++){
-            for(int j = 0;j<width;j++){
-                this.plateau[i][j]= new Tuile(i,j);
-            }
-        }
         //Tuiles accessibles(la ca part dans toutes les directions)
         for(int i = 0;i<height;i++){
             for(int j = 0;j<width;j++){

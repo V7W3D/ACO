@@ -140,7 +140,6 @@ public class Vue extends JFrame {
                             textToPrint[i1][j1].setIcon(resizedIcone(ressourcePath + "/home.png", 350 / Math.max(plateau.getHeight(),plateau.getWidth() )));
                             mesTuiles[i1][j1].setColony(true);
                         }
-
                         else if (!FoodChoisie) {
                             plateau.initFood(i1, j1);
                             FoodChoisie = true;
@@ -155,7 +154,6 @@ public class Vue extends JFrame {
                                 } else {
                                     mesTuiles[i1][j1].setIsObstacle(true);
                                     mesTuiles[i1][j1].setBackground(Color.black);
-
                                 }
                             }
                         }
