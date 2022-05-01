@@ -40,4 +40,18 @@ public class Sauvegarde {
         }
         catch (IOException e){}
       }
+      
+      void writeMatrice(String filename, Tuile[][] matrix) {
+        try {
+            BufferedWriter bw = new BufferedWriter(new FileWriter(filename));
+            for (int i = 0; i < matrix.length; i++) {
+                for (int j = 0; j < matrix[i].length; j++) {
+                    bw.write((matrix[i][j].isObstacle ? 1 : 0) + ((j == matrix[i].length-1) ? "" : ","));
+                }
+                bw.newLine();
+            }
+            bw.flush();
+            bw.close();
+        } catch (IOException e) {}
+      }
 }
