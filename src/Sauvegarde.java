@@ -18,6 +18,20 @@ public class Sauvegarde {
         this.v = v;
     }
 
+    public void ouvrir(){
+        JFileChooser choose = new JFileChooser(
+            FileSystemView
+            .getFileSystemView()
+            .getHomeDirectory()
+        );
+        int res = choose.showOpenDialog(null);
+        if (res == JFileChooser.APPROVE_OPTION) {
+          File file = choose.getSelectedFile();
+          readMatrice(file.getAbsolutePath());
+        }
+        
+    }
+
     void readMatrice(String filename){
         try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
             String line = br.readLine();
@@ -40,8 +54,8 @@ public class Sauvegarde {
         }
         catch (IOException e){}
       }
-      
-      void writeMatrice(String filename, Tuile[][] matrix) {
+
+    void writeMatrice(String filename, Tuile[][] matrix) {
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter(filename));
             for (int i = 0; i < matrix.length; i++) {
@@ -53,5 +67,5 @@ public class Sauvegarde {
             bw.flush();
             bw.close();
         } catch (IOException e) {}
-      }
+    }
 }
