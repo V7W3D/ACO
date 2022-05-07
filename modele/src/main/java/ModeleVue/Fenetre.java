@@ -1,4 +1,4 @@
-package src;
+package ModeleVue;
 import java.awt.*;
 import javax.swing.*;
 
@@ -23,7 +23,6 @@ public Fenetre(){
     this.add(field5);
     int result = JOptionPane.showConfirmDialog(null,this,"Parametres",JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
     if (result == JOptionPane.OK_OPTION){
-        //traitement des donnees
         if(allFieldsCorrect(field1.getText(), field2.getText(), field3.getText(), field4.getText(), field5.getText())){
             Vue vue = new Vue(Integer.valueOf(field3.getText()),Integer.valueOf(field4.getText()));
             Plateau p = new Plateau(Integer.valueOf(field3.getText()),Integer.valueOf(field4.getText()),vue);

@@ -1,4 +1,4 @@
-package src;
+package ModeleVue;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -82,10 +82,6 @@ public class Plateau {
         this.tauxDeVaporation = taux;
     }
 
-    public Tuile[][] getTuiles(){
-        return this.plateau;
-    }
-
     public void setALpha(int a){
         alpha = a;
     }
@@ -122,7 +118,7 @@ public class Plateau {
                                 else if (pherom == Tuile.pheromMax) pherom = 1;
                                 double qtt = 1 - pherom;
                                 int color = (int)(255 * qtt);
-                                vue.mesTuiles[i][j].setBackground( new Color(255, color, color) );
+                                plateau[i][j].setBackground( new Color(255, color, color) );
                             }
                         }
                     }
@@ -135,15 +131,10 @@ public class Plateau {
     public Plateau(int height, int width,Vue vue){
         this.height = height;
         this.width = width;
-        plateau = new Tuile[height][width];
+        plateau = vue.mesTuiles;
         this.vue = vue;
         this.maxDistanceAnt = height * width * 10;
         this.fourmiPlusRapide = new Fourmi();
-        for(int i = 0;i<height;i++){
-            for(int j = 0;j<width;j++){
-                this.plateau[i][j]= new Tuile(i,j, this.vue);
-            }
-        }
         //Tuiles accessibles(la ca part dans toutes les directions)
         for(int i = 0;i<height;i++){
             for(int j = 0;j<width;j++){
@@ -329,7 +320,7 @@ public class Plateau {
             
         @Override
         public synchronized void run() {
-            var foundFoud = false;
+            boolean foundFoud = false;
             while (isAlive){
                 while (pauseColorsAndPheromsAndAntUpdate){
                     pause(100);

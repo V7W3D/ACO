@@ -1,9 +1,10 @@
-package src;
+package ModeleVue;
 
-import java.awt.Color;
 import java.util.ArrayList;
 
-public class Tuile{
+import javax.swing.JPanel;
+
+public class Tuile extends JPanel {
 
     public static double pheromMin = 0.10;
     public static double pheromMax = 0.80;
@@ -13,29 +14,18 @@ public class Tuile{
     ArrayList<Fourmi> Fourmis = new ArrayList<>();
     boolean isColony = false;
     private boolean isFood = false;
-    boolean isObstacle = false;
+    public boolean isObstacle = false;
     ArrayList<Tuile> tuiles = new ArrayList<>();
     private int cost = 1;//le cout de la tuile
     boolean hasAnt = false;
     private String idAnt = "";
     private int i,j;
-    private Vue vue;
     
-    public void initColor(){
-        vue.mesTuiles[i][j].setBackground(Color.white);
-    }
-
-
-    public void setBackground(Color couleur){
-        vue.mesTuiles[i][j].setBackground(couleur);
-    }
-
-    public Tuile(int i, int j, Vue vue){
+    public Tuile(int i, int j){
         id=IDEN;
         IDEN++;
         pherom = pheromMin;
         this.setI(i); this.setJ(j);
-        this.vue = vue;
     }
 
     public int getJ() {
@@ -68,11 +58,6 @@ public class Tuile{
 
     public int getCost(){
         return cost;
-    }
-
-    @Override
-    public boolean equals(Object t){
-        return ((Tuile)t).id == id;
     }
 
     public boolean isFood(){
