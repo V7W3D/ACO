@@ -1,2 +1,4 @@
-#To Run : 
-    ##./gradlew run
+### To Run : 
+'''
+    ./gradlew run
+'''
