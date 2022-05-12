@@ -80,7 +80,7 @@ public Fenetre(){
         } catch (Exception e) {
             return false;
         }
-        if(n>99) return false;
+        if(n>200) return false;
         return true;
     }
 

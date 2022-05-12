@@ -41,7 +41,11 @@ public class Vue extends JFrame {
     public Vue(int n, int m) {
         this.n = n;
         this.m = m;
-        this.ressourcePath = System.getProperty("user.dir") + "\\src\\resources";
+        this.ressourcePath = System.getProperty("user.dir");
+        if(this.ressourcePath.indexOf("/app") == -1){
+            this.ressourcePath += "/app";
+        }
+        this.ressourcePath += "/src/resources";
         System.out.println(ressourcePath);
         setSize(hauteur, largeur);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -152,7 +156,7 @@ public class Vue extends JFrame {
                                 if (mesTuiles[i1][j1].isObstacle) {
                                     mesTuiles[i1][j1].setIsObstacle(false);
                                     mesTuiles[i1][j1].setBackground(Color.white);
-                                } else {
+                                } else if(!mesTuiles[i1][j1].isFood() && !mesTuiles[i1][j1].isColony) {
                                     mesTuiles[i1][j1].setIsObstacle(true);
                                     mesTuiles[i1][j1].setBackground(Color.black);
                                 }
