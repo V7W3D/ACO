@@ -10,6 +10,7 @@ public class Tuile extends JPanel {
     public static double pheromMax = 0.80;
     private double pherom;//initial value to 1
     static int IDEN=0;
+    private int nbFourmis = 0;
     int id;
     ArrayList<Fourmi> Fourmis = new ArrayList<>();
     boolean isColony = false;
@@ -20,6 +21,18 @@ public class Tuile extends JPanel {
     boolean hasAnt = false;
     private String idAnt = "";
     private int i,j;
+
+    public void setCost(int cost){
+        this.cost = cost;
+    }
+
+    public void incNbFourmis(){
+        nbFourmis++;
+    }
+
+    public int getNbFourmi(){
+        return nbFourmis;
+    }
     
     public Tuile(int i, int j){
         id=IDEN;

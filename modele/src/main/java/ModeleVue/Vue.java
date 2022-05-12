@@ -41,7 +41,13 @@ public class Vue extends JFrame {
     public Vue(int n, int m) {
         this.n = n;
         this.m = m;
-        this.ressourcePath = System.getProperty("user.dir") + "\\src\\resources";
+
+        this.ressourcePath = System.getProperty("user.dir");
+        if(this.ressourcePath.indexOf("app") == -1){
+            this.ressourcePath += "/app";
+        }
+        System.out.println(ressourcePath);
+        this.ressourcePath += "/src/resources";
         setSize(hauteur, largeur);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("Simulation Algo des colonies de Fourmis");
@@ -132,7 +138,6 @@ public class Vue extends JFrame {
             for (int j = 0; j < m; j++) {
                 int i1 = i, j1 = j;
                 mesTuiles[i][j].addMouseListener(new MouseAdapter() {
-                    ImageIcon sauv;
                     @Override
                     public void mousePressed(MouseEvent e) {
                         if (!ColonieChoisie) {
@@ -152,19 +157,13 @@ public class Vue extends JFrame {
                                 if (mesTuiles[i1][j1].isObstacle) {
                                     mesTuiles[i1][j1].setIsObstacle(false);
                                     mesTuiles[i1][j1].setBackground(Color.white);
-                                } else {
+                                } else if(!mesTuiles[i1][j1].isFood() && !mesTuiles[i1][j1].isColony) {
+                                    mesTuiles[i1][j1].setPhermoToMin();
                                     mesTuiles[i1][j1].setIsObstacle(true);
                                     mesTuiles[i1][j1].setBackground(Color.black);
                                 }
                             }
                         }
-                    }
-                    public void mouseEntered(MouseEvent me) {
-                        
-                        textToPrint[i1][j1].setText("zz");
-                    }
-                    public void mouseExited(MouseEvent me) {
-                        textToPrint[i1][j1].setText(null);
                     }
                 });
             }
