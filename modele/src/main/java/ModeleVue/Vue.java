@@ -157,6 +157,7 @@ public class Vue extends JFrame {
                                     mesTuiles[i1][j1].setIsObstacle(false);
                                     mesTuiles[i1][j1].setBackground(Color.white);
                                 } else if(!mesTuiles[i1][j1].isFood() && !mesTuiles[i1][j1].isColony) {
+                                    mesTuiles[i1][j1].setPhermoToMin();
                                     mesTuiles[i1][j1].setIsObstacle(true);
                                     mesTuiles[i1][j1].setBackground(Color.black);
                                 }
