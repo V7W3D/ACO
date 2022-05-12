@@ -42,7 +42,7 @@ public class Vue extends JFrame {
         this.n = n;
         this.m = m;
         this.ressourcePath = System.getProperty("user.dir");
-        if(this.ressourcePath.indexOf("/app") == -1){
+        if(this.ressourcePath.indexOf("app") == -1){
             this.ressourcePath += "/app";
         }
         this.ressourcePath += "/src/resources";
@@ -83,7 +83,7 @@ public class Vue extends JFrame {
         lancerLaSimulation.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (!lancer) {
+                if (!lancer && ColonieChoisie && FoodChoisie) {
                     plateau.simulation();
                     lancer = true;
                 }
