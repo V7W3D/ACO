@@ -11,15 +11,15 @@ public Fenetre(){
     JTextField field4 = new JTextField("10");
     JTextField field5 = new JTextField("10");
     this.setLayout(new GridLayout(0, 1));
-    this.add(new JLabel("Alpha : "));
+    this.add(new JLabel("Alpha : (entre -10 et 10) "));
     this.add(field1);
-    this.add(new JLabel("Beta : "));
+    this.add(new JLabel("Beta :(entre -10 et 10) "));
     this.add(field2);
-    this.add(new JLabel("x : "));
+    this.add(new JLabel("x : (entre 10 et 30)"));
     this.add(field3);
-    this.add(new JLabel("y : "));
+    this.add(new JLabel("y : (entre 10 et 30)"));
     this.add(field4);
-    this.add(new JLabel("Nombres de fourmis : "));
+    this.add(new JLabel("Nombres de fourmis : ( entre 5 et 200)"));
     this.add(field5);
     int result = JOptionPane.showConfirmDialog(null,this,"Parametres",JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
     if (result == JOptionPane.OK_OPTION){
@@ -47,7 +47,7 @@ public Fenetre(){
         } catch (Exception e) {
             return false;
         }
-        if(n>50) return false;
+        if(n>30 || n<10) return false;
         return true;
     }
 
@@ -58,7 +58,7 @@ public Fenetre(){
         } catch (Exception e) {
             return false;
         }
-        if(n>9) return false;
+        if(n>10 || n<-10) return false;
         return true;
     }
 
@@ -69,7 +69,7 @@ public Fenetre(){
         } catch (Exception e) {
             return false;
         }
-        if(n>9) return false;
+        if(n>10 || n<-10) return false;
         return true;
     }
 
@@ -80,7 +80,7 @@ public Fenetre(){
         } catch (Exception e) {
             return false;
         }
-        if(n>200) return false;
+        if(n>200 || n<5) return false;
         return true;
     }
 
