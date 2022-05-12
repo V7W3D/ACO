@@ -42,7 +42,6 @@ public class Vue extends JFrame {
         this.n = n;
         this.m = m;
         this.ressourcePath = System.getProperty("user.dir") + "\\src\\resources";
-        System.out.println(ressourcePath);
         setSize(hauteur, largeur);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("Simulation Algo des colonies de Fourmis");
@@ -133,6 +132,7 @@ public class Vue extends JFrame {
             for (int j = 0; j < m; j++) {
                 int i1 = i, j1 = j;
                 mesTuiles[i][j].addMouseListener(new MouseAdapter() {
+                    ImageIcon sauv;
                     @Override
                     public void mousePressed(MouseEvent e) {
                         if (!ColonieChoisie) {
@@ -158,6 +158,13 @@ public class Vue extends JFrame {
                                 }
                             }
                         }
+                    }
+                    public void mouseEntered(MouseEvent me) {
+                        
+                        textToPrint[i1][j1].setText("zz");
+                    }
+                    public void mouseExited(MouseEvent me) {
+                        textToPrint[i1][j1].setText(null);
                     }
                 });
             }
