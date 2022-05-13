@@ -1,30 +1,48 @@
 package ModeleVue;
 
 import javax.swing.*;
-
-import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 class Pop extends JFrame {
-    Popup p;
+    JLabel titre, nbFourmis, nbPherom;
+    JPanel mainePanel;
+    JTextField text1;
+    JButton apply;
     Pop(Tuile a)
     {
-        JFrame f = new JFrame("Tuile");
-        JLabel l = new JLabel("This is a Popup");
- 
-        f.setSize(400, 200);
- 
-        PopupFactory pf = new PopupFactory();
-        JPanel p2 = new JPanel();
-        p2.setBackground(Color.WHITE);
- 
-        p2.add(l);
-        p = pf.getPopup(f, p2, 180, 100);
-        JLabel jlabel = new JLabel(""+a.toString());
-        jlabel.setFont(new Font("Verdana",1,20));
-        JPanel p1 = new JPanel();
-        f.add(p1);
-        f.add(jlabel);
-        f.setVisible(true);
-        f.setLayout(new GridBagLayout());
+        nbFourmis = new JLabel("nombre de fourmis : "+a.getNbFourmi());
+        nbFourmis.setBounds(50,10,150,20);
+        String phrrom = String.valueOf(a.getPherom() * 100).substring(0,4);
+        nbPherom = new JLabel("taux de pheromones : "+phrrom+"%");
+        nbPherom.setBounds(50,30,160,20);
+        mainePanel = new JPanel();
+        text1 = new JTextField(String.valueOf(a.getCost()));
+        apply = new JButton("Apply");
+        apply.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int cost = Integer.valueOf(text1.getText());
+                a.setCost(cost);
+                dispose();
+            }
+            
+        });
+        apply.setBounds(50,90,100,20);
+        text1.setBounds(50,70,100,20);
+        titre = new JLabel("Entrez un cout : ");
+        titre.setBounds(50,50,100,20);
+        mainePanel.setLayout(null);
+        mainePanel.add(titre);
+        mainePanel.add(text1);
+        mainePanel.add(apply);
+        mainePanel.add(nbFourmis);
+        mainePanel.add(nbPherom);
+        setSize(300, 180);
+        setVisible(true);
+        setContentPane(mainePanel);
+        setResizable(false);
+        setTitle("informations");
     }
     
 }

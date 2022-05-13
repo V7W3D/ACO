@@ -4,6 +4,7 @@ import javax.swing.*;
 import javax.swing.ImageIcon;
 import java.awt.*;
 import java.awt.event.*;
+import java.net.URI;
 import javax.swing.JMenuBar;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -41,12 +42,13 @@ public class Vue extends JFrame {
     public Vue(int n, int m) {
         this.n = n;
         this.m = m;
+
         this.ressourcePath = System.getProperty("user.dir");
         if(this.ressourcePath.indexOf("app") == -1){
             this.ressourcePath += "/app";
         }
-        this.ressourcePath += "/src/resources";
         System.out.println(ressourcePath);
+        this.ressourcePath += "/src/resources";
         setSize(hauteur, largeur);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("Simulation Algo des colonies de Fourmis");
@@ -77,6 +79,22 @@ public class Vue extends JFrame {
         JMenuItem restart = new JMenuItem("Restart");
         JMenu LancerSim = new JMenu("Lancer");
         JMenuItem lancerLaSimulation = new JMenuItem("Lancer Simulation");
+        JMenu help = new JMenu("help");
+        JMenuItem helpMe = new JMenuItem("video help");
+        helpMe.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
+                if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE)) { 
+                    try { 
+                        desktop.browse(new URI("https://youtu.be/4WZLphQKibA"));
+                    } catch (Exception a) { 
+                        a.printStackTrace(); 
+                    } 
+                }
+            }
+        });
+        help.add(helpMe);
         LancerSim.add(lancerLaSimulation);
         modifications.add(modifierParametres);
         modifications.add(afficherParametres);
@@ -127,6 +145,7 @@ public class Vue extends JFrame {
         menu.add(menuOPtions);
         menu.add(LancerSim);
         menu.add(modifications);
+        menu.add(help);
         return menu;
     }
 
@@ -139,13 +158,13 @@ public class Vue extends JFrame {
                 mesTuiles[i][j].addMouseListener(new MouseAdapter() {
                     @Override
                     public void mousePressed(MouseEvent e) {
-                        if (!ColonieChoisie) {
+                        if (!ColonieChoisie && !mesTuiles[i1][j1].isFood()) {
                             plateau.initDepart(i1, j1);
                             ColonieChoisie = true;
                             textToPrint[i1][j1].setIcon(resizedIcone(ressourcePath + "/home.png", 350 / Math.max(plateau.getHeight(),plateau.getWidth() )));
                             mesTuiles[i1][j1].setColony(true);
                         }
-                        else if (!FoodChoisie) {
+                        else if (!FoodChoisie && !mesTuiles[i1][j1].isColony) {
                             plateau.initFood(i1, j1);
                             FoodChoisie = true;
                             textToPrint[i1][j1].setIcon(resizedIcone(ressourcePath + "/food.png", 350 / Math.max(plateau.getHeight(),plateau.getWidth() )));

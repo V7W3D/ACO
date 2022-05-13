@@ -235,6 +235,7 @@ public class Plateau {
         Tuile prochaineTuile = choixTuile(probs, tuile);
         fourmi.parcours.add(prochaineTuile);
         prochaineTuile.hasAnt = true;
+        prochaineTuile.incNbFourmis();
         boolean remove = false;
         ArrayList<Tuile> tmp = new ArrayList<Tuile>(fourmi.parcours);
         if (fourmi.wentFromIt(prochaineTuile)){
