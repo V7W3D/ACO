@@ -4,6 +4,7 @@ import javax.swing.*;
 import javax.swing.ImageIcon;
 import java.awt.*;
 import java.awt.event.*;
+import java.net.URI;
 import javax.swing.JMenuBar;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -78,6 +79,22 @@ public class Vue extends JFrame {
         JMenuItem restart = new JMenuItem("Restart");
         JMenu LancerSim = new JMenu("Lancer");
         JMenuItem lancerLaSimulation = new JMenuItem("Lancer Simulation");
+        JMenu help = new JMenu("help");
+        JMenuItem helpMe = new JMenuItem("video help");
+        helpMe.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
+                if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE)) { 
+                    try { 
+                        desktop.browse(new URI("https://youtu.be/4WZLphQKibA"));
+                    } catch (Exception a) { 
+                        a.printStackTrace(); 
+                    } 
+                }
+            }
+        });
+        help.add(helpMe);
         LancerSim.add(lancerLaSimulation);
         modifications.add(modifierParametres);
         modifications.add(afficherParametres);
@@ -128,6 +145,7 @@ public class Vue extends JFrame {
         menu.add(menuOPtions);
         menu.add(LancerSim);
         menu.add(modifications);
+        menu.add(help);
         return menu;
     }
 

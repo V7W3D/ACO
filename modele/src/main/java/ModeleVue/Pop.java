@@ -1,8 +1,6 @@
 package ModeleVue;
 
 import javax.swing.*;
-
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 class Pop extends JFrame {
