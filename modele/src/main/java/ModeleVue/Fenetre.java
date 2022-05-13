@@ -30,6 +30,8 @@ public Fenetre(){
             p.setBeta(Integer.valueOf(field2.getText()));
             p.setNbFourmis(Integer.valueOf(field5.getText()));
             vue.setPlateau(p);
+            Sauvegarde s = new Sauvegarde(vue, p);
+            vue.setSauvegarde(s);
             vue.init();
             vue.setVisible(true);
             vue.setLocationRelativeTo(null);

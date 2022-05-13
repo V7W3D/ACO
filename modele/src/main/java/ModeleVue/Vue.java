@@ -10,18 +10,24 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 public class Vue extends JFrame {
+    Sauvegarde s;
     private static final int hauteur = 600;
     private static final int largeur = 600;
-    private int n;
-    private int m;
+    int n;
+    int m;
     private Plateau plateau;
-    private JLabel[][] textToPrint;
+    JLabel[][] textToPrint;
     public Tuile[][] mesTuiles;
-    private String ressourcePath;
+    String ressourcePath;
     private ImageIcon iconeAntResized;
     private JMenuBar menuBar;
-    private boolean ColonieChoisie = false;
-    private boolean FoodChoisie = false, lancer = false;
+    boolean ColonieChoisie = false;
+    boolean FoodChoisie = false, lancer = false;
+    private boolean mousePressed = false;
+
+    public void setSauvegarde(Sauvegarde s) {
+        this.s = s;
+    }
 
     public void initColor() {
         for (int i = 0; i < n; i++) {
@@ -32,7 +38,7 @@ public class Vue extends JFrame {
         }
     }
 
-    private ImageIcon resizedIcone(String path, int newsize) {
+    ImageIcon resizedIcone(String path, int newsize) {
         ImageIcon imageIcon = new ImageIcon(path); // load the image to a imageIcon
         Image image = imageIcon.getImage(); // transform it
         Image newimg = image.getScaledInstance(newsize, newsize, java.awt.Image.SCALE_SMOOTH);
@@ -40,6 +46,7 @@ public class Vue extends JFrame {
     }
 
     public Vue(int n, int m) {
+        this.s = new Sauvegarde(this);
         this.n = n;
         this.m = m;
 
@@ -47,7 +54,6 @@ public class Vue extends JFrame {
         if(this.ressourcePath.indexOf("app") == -1){
             this.ressourcePath += "/app";
         }
-        System.out.println(ressourcePath);
         this.ressourcePath += "/src/resources";
         setSize(hauteur, largeur);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -70,6 +76,7 @@ public class Vue extends JFrame {
     }
 
     private JMenuBar initMenuBar() {
+        String fileNames[] = {"parcours_10_10","parcours_15_10","parcours_10_15","parcours_20_20","parcours_30_30"};
         JMenuBar menu = new JMenuBar();
         JMenu menuOPtions = new JMenu("Options");
         JMenu modifications = new JMenu("Parametres");
@@ -78,9 +85,41 @@ public class Vue extends JFrame {
         JMenuItem pause = new JMenuItem("Pause");
         JMenuItem restart = new JMenuItem("Restart");
         JMenu LancerSim = new JMenu("Lancer");
+        JMenuItem sauvgarder = new JMenuItem("Sauvgarder");
+        JMenuItem ouvrir = new JMenuItem("Ouvrir");
+        ouvrir.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                s.ouvrir();
+            }
+
+        });
+        sauvgarder.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                s.sauvgarder();
+            }
+
+        });
+
         JMenuItem lancerLaSimulation = new JMenuItem("Lancer Simulation");
         JMenu help = new JMenu("help");
         JMenuItem helpMe = new JMenuItem("video help");
+        JMenu parcours = new JMenu("parcours");
+        JMenuItem parcoursList[] = new JMenuItem[5];
+        for (int i=0;i<5;i++){
+            parcoursList[i] = new JMenuItem(fileNames[i]);
+            parcours.add(parcoursList[i]);
+            int i1 = i;
+            parcoursList[i].addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    s.readMatrice(ressourcePath + "/" + fileNames[i1]);
+                } 
+            });
+        }
         helpMe.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -129,6 +168,8 @@ public class Vue extends JFrame {
         });
         menuOPtions.add(pause);
         menuOPtions.add(restart);
+        menuOPtions.add(sauvgarder);
+        menuOPtions.add(ouvrir);
         pause.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -145,6 +186,7 @@ public class Vue extends JFrame {
         menu.add(menuOPtions);
         menu.add(LancerSim);
         menu.add(modifications);
+        menu.add(parcours);
         menu.add(help);
         return menu;
     }
@@ -180,9 +222,28 @@ public class Vue extends JFrame {
                                     mesTuiles[i1][j1].setIsObstacle(true);
                                     mesTuiles[i1][j1].setBackground(Color.black);
                                 }
+                                mousePressed = true;
                             }
                         }
                     }
+
+                    public void mouseEntered(MouseEvent e) {
+                        if(mousePressed == true){
+                            if (mesTuiles[i1][j1].isObstacle) {
+                                mesTuiles[i1][j1].setIsObstacle(false);
+                                mesTuiles[i1][j1].setBackground(Color.white);
+                            } else if(!mesTuiles[i1][j1].isFood() && !mesTuiles[i1][j1].isColony) {
+                                mesTuiles[i1][j1].setIsObstacle(true);
+                                mesTuiles[i1][j1].setBackground(Color.black);
+                            }
+                        }
+                    }
+
+                    public void mouseReleased(MouseEvent e) {
+                        mousePressed = false;
+                    }
+
+
                 });
             }
         }
