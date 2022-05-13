@@ -21,6 +21,7 @@ public class Vue extends JFrame {
     private JMenuBar menuBar;
     private boolean ColonieChoisie = false;
     private boolean FoodChoisie = false, lancer = false;
+    private boolean mousePressed = false;
 
     public void initColor() {
         for (int i = 0; i < n; i++) {
@@ -155,8 +156,25 @@ public class Vue extends JFrame {
                                     mesTuiles[i1][j1].setIsObstacle(true);
                                     mesTuiles[i1][j1].setBackground(Color.black);
                                 }
+                                mousePressed = true;
                             }
                         }
+                    }
+
+                    public void mouseEntered(MouseEvent e) {
+                        if(mousePressed == true){
+                            if (mesTuiles[i1][j1].isObstacle) {
+                                mesTuiles[i1][j1].setIsObstacle(false);
+                                mesTuiles[i1][j1].setBackground(Color.white);
+                            } else {
+                                mesTuiles[i1][j1].setIsObstacle(true);
+                                mesTuiles[i1][j1].setBackground(Color.black);
+                            }
+                        }
+                    }
+
+                    public void mouseReleased(MouseEvent e) {
+                        mousePressed = false;
                     }
                 });
             }
