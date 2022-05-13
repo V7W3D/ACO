@@ -13,9 +13,11 @@ import javax.swing.filechooser.FileSystemView;
 
 public class Sauvegarde {
     private Vue v;
+    private Plateau p;
 
-    public Sauvegarde(Vue v) {
+    public Sauvegarde(Vue v, Plateau p) {
         this.v = v;
+        this.p = p;
     }
 
     public void sauvgarder() {
@@ -53,13 +55,28 @@ public class Sauvegarde {
                String[] ligne = line.split(",");
                if(ligne.length == v.mesTuiles[0].length){
                     for(int j = 0; j < ligne.length; j++){
-                        if(Integer.parseInt(ligne[j]) == 1){
-                                v.mesTuiles[i][j].setIsObstacle(true);
-                                v.mesTuiles[i][j].setBackground(Color.black);
+                        if(Integer.parseInt(ligne[j]) == 3){
+                            p.initFood(i, j);
+                            v.FoodChoisie = true;
+                            v.textToPrint[i][j].setIcon(v.resizedIcone(v.ressourcePath + "/food.png", 350 / Math.max(p.getHeight(),p.getWidth() )));
                         }
                         else{
-                                v.mesTuiles[i][j].setIsObstacle(false);
-                                v.mesTuiles[i][j].setBackground(Color.white);
+                            if(Integer.parseInt(ligne[j]) == 2){
+                                p.initDepart(i, j);
+                                v.ColonieChoisie = true;
+                                v.textToPrint[i][j].setIcon(v.resizedIcone(v.ressourcePath + "/home.png", 350 / Math.max(p.getHeight(),p.getWidth())));
+                                v.mesTuiles[i][j].setColony(true);
+                            }
+                            else{
+                                if(Integer.parseInt(ligne[j]) == 1){
+                                    v.mesTuiles[i][j].setIsObstacle(true);
+                                    v.mesTuiles[i][j].setBackground(Color.black);
+                                }
+                                if(Integer.parseInt(ligne[j]) == 0){
+                                    v.mesTuiles[i][j].setIsObstacle(false);
+                                    v.mesTuiles[i][j].setBackground(Color.white);
+                                }
+                            }
                         }
                     } 
                     line = br.readLine();
@@ -75,7 +92,15 @@ public class Sauvegarde {
             BufferedWriter bw = new BufferedWriter(new FileWriter(filename));
             for (int i = 0; i < matrix.length; i++) {
                 for (int j = 0; j < matrix[i].length; j++) {
-                    bw.write((matrix[i][j].isObstacle ? 1 : 0) + ((j == matrix[i].length-1) ? "" : ","));
+                    if(matrix[i][j].isColony){
+                        bw.write(2 + ((j == matrix[i].length-1) ? "" : ","));
+                    }
+                    else{
+                        if(matrix[i][j].isFood){
+                            bw.write(3 + ((j == matrix[i].length-1) ? "" : ","));
+                        }
+                        else{bw.write((matrix[i][j].isObstacle ? 1 : 0) + ((j == matrix[i].length-1) ? "" : ","));}
+                    }
                 }
                 bw.newLine();
             }

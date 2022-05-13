@@ -15,13 +15,13 @@ public class Vue extends JFrame {
     private int n;
     private int m;
     private Plateau plateau;
-    private JLabel[][] textToPrint;
+    JLabel[][] textToPrint;
     Tuile[][] mesTuiles;
-    private String ressourcePath;
+    String ressourcePath;
     private ImageIcon iconeAntResized;
     private JMenuBar menuBar;
-    private boolean ColonieChoisie = false;
-    private boolean FoodChoisie = false, lancer = false;
+    boolean ColonieChoisie = false;
+    boolean FoodChoisie = false, lancer = false;
     private boolean mousePressed = false;
 
     public void initColor() {
@@ -33,7 +33,7 @@ public class Vue extends JFrame {
         }
     }
 
-    private ImageIcon resizedIcone(String path, int newsize) {
+    ImageIcon resizedIcone(String path, int newsize) {
         ImageIcon imageIcon = new ImageIcon(path); // load the image to a imageIcon
         Image image = imageIcon.getImage(); // transform it
         Image newimg = image.getScaledInstance(newsize, newsize, java.awt.Image.SCALE_SMOOTH);
@@ -62,7 +62,6 @@ public class Vue extends JFrame {
             }
         }
         setContentPane(container);
-        this.s = new Sauvegarde(this);
     }
 
     private JMenuBar initMenuBar() {
@@ -206,6 +205,10 @@ public class Vue extends JFrame {
     public void setPlateau(Plateau plateau) {
         this.plateau = plateau;
         iconeAntResized = resizedIcone(this.ressourcePath + "/ant.png", 350 / Math.max(plateau.getHeight(),plateau.getWidth()));
+    }
+    
+    public void setSauvegarde(Sauvegarde s) {
+        this.s = s;
     }
 
     public void printAnt(int i, int j) {

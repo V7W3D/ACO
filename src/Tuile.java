@@ -13,7 +13,7 @@ public class Tuile extends JPanel {
     int id;
     ArrayList<Fourmi> Fourmis = new ArrayList<>();
     boolean isColony = false;
-    private boolean isFood = false;
+    boolean isFood = false;
     boolean isObstacle = false;
     ArrayList<Tuile> tuiles = new ArrayList<>();
     private int cost = 1;//le cout de la tuile
