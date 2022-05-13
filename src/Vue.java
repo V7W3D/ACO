@@ -11,6 +11,7 @@ import javax.swing.event.ChangeListener;
 public class Vue extends JFrame {
     private static final int hauteur = 600;
     private static final int largeur = 600;
+    Sauvegarde s;
     private int n;
     private int m;
     private Plateau plateau;
@@ -42,6 +43,7 @@ public class Vue extends JFrame {
     public Vue(int n, int m) {
         this.n = n;
         this.m = m;
+        this.s = new Sauvegarde(this);
         this.ressourcePath = System.getProperty("user.dir") + "\\src\\ressources";
         setSize(hauteur, largeur);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -72,10 +74,28 @@ public class Vue extends JFrame {
         JMenuItem pause = new JMenuItem("Pause");
         JMenuItem restart = new JMenuItem("Restart");
         JMenu LancerSim = new JMenu("Lancer");
+        JMenuItem sauvgarder = new JMenuItem("Sauvgarder");
+        JMenuItem ouvrir = new JMenuItem("Ouvrir");
         JMenuItem lancerLaSimulation = new JMenuItem("Lancer Simulation");
         LancerSim.add(lancerLaSimulation);
         modifications.add(modifierParametres);
         modifications.add(afficherParametres);
+        ouvrir.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                s.ouvrir();
+            }
+
+        });
+        sauvgarder.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                s.sauvgarder();
+            }
+
+        });
         lancerLaSimulation.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -107,6 +127,8 @@ public class Vue extends JFrame {
         });
         menuOPtions.add(pause);
         menuOPtions.add(restart);
+        menuOPtions.add(sauvgarder);
+        menuOPtions.add(ouvrir);
         pause.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
