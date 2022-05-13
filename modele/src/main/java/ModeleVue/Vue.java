@@ -140,13 +140,13 @@ public class Vue extends JFrame {
                 mesTuiles[i][j].addMouseListener(new MouseAdapter() {
                     @Override
                     public void mousePressed(MouseEvent e) {
-                        if (!ColonieChoisie) {
+                        if (!ColonieChoisie && !mesTuiles[i1][j1].isFood()) {
                             plateau.initDepart(i1, j1);
                             ColonieChoisie = true;
                             textToPrint[i1][j1].setIcon(resizedIcone(ressourcePath + "/home.png", 350 / Math.max(plateau.getHeight(),plateau.getWidth() )));
                             mesTuiles[i1][j1].setColony(true);
                         }
-                        else if (!FoodChoisie) {
+                        else if (!FoodChoisie && !mesTuiles[i1][j1].isColony) {
                             plateau.initFood(i1, j1);
                             FoodChoisie = true;
                             textToPrint[i1][j1].setIcon(resizedIcone(ressourcePath + "/food.png", 350 / Math.max(plateau.getHeight(),plateau.getWidth() )));
