@@ -51,18 +51,20 @@ public class Sauvegarde {
             int i = 0;
             while (line != null) {
                String[] ligne = line.split(",");
-               for(int j = 0; j < ligne.length; j++){
-                   if(Integer.parseInt(ligne[j]) == 1){
-                        v.mesTuiles[i][j].setIsObstacle(true);
-                        v.mesTuiles[i][j].setBackground(Color.black);
-                   }
-                   else{
-                        v.mesTuiles[i][j].setIsObstacle(false);
-                        v.mesTuiles[i][j].setBackground(Color.white);
-                   }
-               } 
-               line = br.readLine();
-               i++;
+               if(ligne.length == v.mesTuiles[0].length){
+                    for(int j = 0; j < ligne.length; j++){
+                        if(Integer.parseInt(ligne[j]) == 1){
+                                v.mesTuiles[i][j].setIsObstacle(true);
+                                v.mesTuiles[i][j].setBackground(Color.black);
+                        }
+                        else{
+                                v.mesTuiles[i][j].setIsObstacle(false);
+                                v.mesTuiles[i][j].setBackground(Color.white);
+                        }
+                    } 
+                    line = br.readLine();
+                    i++;
+               }else{return;}
             }
         }
         catch (IOException e){}

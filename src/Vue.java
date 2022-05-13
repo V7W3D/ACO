@@ -43,7 +43,6 @@ public class Vue extends JFrame {
     public Vue(int n, int m) {
         this.n = n;
         this.m = m;
-        this.s = new Sauvegarde(this);
         this.ressourcePath = System.getProperty("user.dir") + "\\src\\ressources";
         setSize(hauteur, largeur);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -63,6 +62,7 @@ public class Vue extends JFrame {
             }
         }
         setContentPane(container);
+        this.s = new Sauvegarde(this);
     }
 
     private JMenuBar initMenuBar() {
